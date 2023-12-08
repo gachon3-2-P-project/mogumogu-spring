@@ -19,20 +19,21 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      ## 1) git ignore에 등록된 application.properties 파일 생성해주기
-      - name: make application-dev.yml
-        run: |
-          cd ./eureka/src/main/resources
-          touch ./application-dev.yml
-          echo "${{ secrets.EUREKA_YML }}" > ./application-dev.yml
+      #      ## 1) git ignore에 등록된 application.properties 파일 생성해주기
+      #      - name: make application-dev.yml
+      #        run: |
+      #          cd ./eureka/src/main/resources
+      #          touch ./application-dev.yml
+      #          echo "${{ secrets.EUREKA_YML }}" > ./application-dev.yml
       ## 2) 스프링 프로젝트 jar 파일 빌드
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        run: |
+          chmod +x gradlew
+          ./gradlew eureka:bootjar
       ## 3) Docker Hub에 이미지 push 하기
       - name: Docker build and release
         run: |
+          cd ./eureka
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ${{ secrets.DOCKER_USERNAME }}/eureka-service . 
           docker push ${{ secrets.DOCKER_USERNAME }}/eureka-service:latest
@@ -56,21 +57,22 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      ## 1) git ignore에 등록된 application.properties 파일 생성해주기
-      - name: make application-dev.yml
-        run: |
-          cd ./gateway/src/main/resources
-          touch ./application-dev.yml
-          echo "${{ secrets.GATEWAY_YML }}" > ./application-dev.yml
-       
+      #      ## 1) git ignore에 등록된 application.properties 파일 생성해주기
+      #      - name: make application-dev.yml
+      #        run: |
+      #          cd ./gateway/src/main/resources
+      #          touch ./application-dev.yml
+      #          echo "${{ secrets.GATEWAY_YML }}" > ./application-dev.yml
+
       ## 2) 스프링 프로젝트 jar 파일 빌드
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        run: |
+          chmod +x gradlew
+          ./gradlew gateway:bootjar
       ## 3) Docker Hub에 이미지 push 하기
       - name: Docker build and release
         run: |
+          cd ./gateway
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ${{ secrets.DOCKER_USERNAME }}/gateway-service . 
           docker push ${{ secrets.DOCKER_USERNAME }}/gateway-service:latest
@@ -94,21 +96,22 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      ## 1) git ignore에 등록된 application.properties 파일 생성해주기
-      - name: make application-dev.yml
-        run: |
-          cd ./user/src/main/resources
-          touch ./application-dev.yml
-          echo "${{ secrets.USER_YML }}" > ./application-dev.yml
-        
+        #      ## 1) git ignore에 등록된 application.properties 파일 생성해주기
+        #      - name: make application-dev.yml
+        #        run: |
+        #          cd ./user/src/main/resources
+        #          touch ./application-dev.yml
+        #          echo "${{ secrets.USER_YML }}" > ./application-dev.yml
+
       ## 2) 스프링 프로젝트 jar 파일 빌드
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        run: |
+          chmod +x gradlew
+          ./gradlew user:bootjar
       ## 3) Docker Hub에 이미지 push 하기
       - name: Docker build and release
         run: |
+          cd ./user
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ${{ secrets.DOCKER_USERNAME }}/user-service . 
           docker push ${{ secrets.DOCKER_USERNAME }}/user-service:latest
@@ -132,21 +135,22 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      ## 1) git ignore에 등록된 application.properties 파일 생성해주기
-      - name: make application-dev.yml
-        run: |
-          cd ./article/src/main/resources
-          touch ./application-dev.yml
-          echo "${{ secrets.ARTICLE_YML }}" > ./application-dev.yml
-      
+      #      ## 1) git ignore에 등록된 application.properties 파일 생성해주기
+      #      - name: make application-dev.yml
+      #        run: |
+      #          cd ./article/src/main/resources
+      #          touch ./application-dev.yml
+      #          echo "${{ secrets.ARTICLE_YML }}" > ./application-dev.yml
+
       ## 2) 스프링 프로젝트 jar 파일 빌드
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        run: |
+          chmod +x gradlew
+          ./gradlew article:bootjar
       ## 3) Docker Hub에 이미지 push 하기
       - name: Docker build and release
         run: |
+          cd ./article
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ${{ secrets.DOCKER_USERNAME }}/article-service . 
           docker push ${{ secrets.DOCKER_USERNAME }}/article-service:latest
@@ -170,21 +174,22 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      ## 1) git ignore에 등록된 application.properties 파일 생성해주기
-      - name: make application-dev.yml
-        run: |
-          cd ./message/src/main/resources
-          touch ./application-dev.yml
-          echo "${{ secrets.MESSAGE_YML }}" > ./application-dev.yml
-       
+      #      ## 1) git ignore에 등록된 application.properties 파일 생성해주기
+      #      - name: make application-dev.yml
+      #        run: |
+      #          cd ./message/src/main/resources
+      #          touch ./application-dev.yml
+      #          echo "${{ secrets.MESSAGE_YML }}" > ./application-dev.yml
+
       ## 2) 스프링 프로젝트 jar 파일 빌드
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        run: |
+          chmod +x gradlew
+          ./gradlew message:bootjar
       ## 3) Docker Hub에 이미지 push 하기
       - name: Docker build and release
         run: |
+          cd ./message
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ${{ secrets.DOCKER_USERNAME }}/message-service . 
           docker push ${{ secrets.DOCKER_USERNAME }}/message-service:latest
@@ -208,21 +213,22 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      ## 1) git ignore에 등록된 application.properties 파일 생성해주기
-      - name: make application-dev.yml
-        run: |
-          cd ./transaction/src/main/resources
-          touch ./application-dev.yml
-          echo "${{ secrets.TRANSACTION_YML }}" > ./application-dev.yml
-      
+      #      ## 1) git ignore에 등록된 application.properties 파일 생성해주기
+      #      - name: make application-dev.yml
+      #        run: |
+      #          cd ./transaction/src/main/resources
+      #          touch ./application-dev.yml
+      #          echo "${{ secrets.TRANSACTION_YML }}" > ./application-dev.yml
+
       ## 2) 스프링 프로젝트 jar 파일 빌드
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        run: |
+          chmod +x gradlew
+          ./gradlew transaction:bootjar
       ## 3) Docker Hub에 이미지 push 하기
       - name: Docker build and release
         run: |
+          cd ./transaction
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ${{ secrets.DOCKER_USERNAME }}/transaction-service . 
           docker push ${{ secrets.DOCKER_USERNAME }}/transaction-service:latest
@@ -240,6 +246,7 @@ jobs:
   compose:
     needs: [eureka, gateway, user, article, message, transaction]
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -254,6 +261,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
+            cd ~/mogumogu-msa
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker rm $(docker ps -a -q)
-            docker-compose up -d
+            docker rm -f $(docker ps -aq)
+            docker-compose up
