@@ -145,7 +145,6 @@ jobs:
       ## 2) 스프링 프로젝트 jar 파일 빌드
       - name: Build with Gradle
         run: |
-          cd ./article
           chmod +x gradlew
           ./gradlew article:bootjar
       ## 3) Docker Hub에 이미지 push 하기
