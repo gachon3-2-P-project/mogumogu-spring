@@ -1,0 +1,18 @@
+server:
+  port: 0
+spring:
+  application:
+    name: user-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mogu-db.cd0wjlhvqle3.ap-northeast-2.rds.amazonaws.com:3306/mogumogu_db
+    username: joowojr
+    password: joowojr0318!
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka:8761/eureka/
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}

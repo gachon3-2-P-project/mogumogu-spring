@@ -1,0 +1,6 @@
+dependencies {
+    implementation project(':common')
+}
+tasks.named('bootBuildImage') {
+    builder = 'paketobuildpacks/builder-jammy-base:latest'
+}
