@@ -1,5 +1,9 @@
 dependencies {
+    // Eureka
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation project(':common')
+    implementation project(':domain')
+    implementation project(':config')
 }
 tasks.named('bootBuildImage') {
     builder = 'paketobuildpacks/builder-jammy-base:latest'

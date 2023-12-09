@@ -5,9 +5,9 @@ spring:
     name: user-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mogu-db.cd0wjlhvqle3.ap-northeast-2.rds.amazonaws.com:3306/mogumogu_db
-    username: joowojr
-    password: joowojr0318!
+    url: ${aws.db.url}
+    username: ${aws.db.username}
+    password: ${aws.db.password}
 eureka:
   client:
     register-with-eureka: true

@@ -54,9 +54,7 @@ subprojects {
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-
-        // mysql
+        // MySQL
         implementation 'mysql:mysql-connector-java:8.0.32'
         runtimeOnly 'com.mysql:mysql-connector-j'
 

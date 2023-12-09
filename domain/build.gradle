@@ -1,0 +1,15 @@
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+dependencies {
+    implementation project(':common')
+    //MapStruct
+    implementation 'org.mapstruct:mapstruct:1.4.1.Final'
+    implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.4.1.Final"
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
+}

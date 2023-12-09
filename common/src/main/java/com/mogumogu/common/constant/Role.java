@@ -1,4 +1,4 @@
-package com.mogumogu.user.constant;
+package com.mogumogu.common.constant;
 
 public enum Role {
 
