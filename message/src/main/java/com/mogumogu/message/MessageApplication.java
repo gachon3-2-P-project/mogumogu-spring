@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EntityScan(basePackages = {"com.mogumogu.domain"})
 @EnableDiscoveryClient
-@SpringBootApplication(scanBasePackages = {"com.mogumogu"})
+@SpringBootApplication
 public class MessageApplication {
 
     public static void main(String[] args) {
