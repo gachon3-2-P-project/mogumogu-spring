@@ -1,8 +1,7 @@
 dependencies {
     implementation project(':domain')
     implementation project(':common')
-    implementation project(':user')
-    implementation project(':article')
+
     // Eureka
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
