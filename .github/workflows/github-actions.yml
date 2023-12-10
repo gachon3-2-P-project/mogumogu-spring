@@ -296,7 +296,7 @@ jobs:
           script: |
             cd ~/mogumogu-spring
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker-compose up
+            docker-compose -f docker-compose.gate.yml up
 #  compose2:
 #    needs : [compose1]
 #    runs-on: ubuntu-latest
