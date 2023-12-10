@@ -1,12 +1,17 @@
 server:
-  port: 8761
+  port: 0
 spring:
   application:
-    name: eureka-service
+    name: auth-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${aws.db.url}
+    username: ${aws.db.username}
+    password: ${aws.db.password}
 eureka:
   client:
-    register-with-eureka: false
-    fetch-registry: false
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka/
   instance:

@@ -3,6 +3,11 @@ server:
 spring:
   application:
     name: message-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${aws.db.url}
+    username: ${aws.db.username}
+    password: ${aws.db.password}
 eureka:
   client:
     register-with-eureka: true
