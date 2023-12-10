@@ -294,9 +294,8 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
-            cd ~/mogumogu-spring
+            cd ~/server
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#            docker rm -f $(docker ps -aq)
             docker-compose up -d
 #  compose2:
 #    needs : [compose1]
