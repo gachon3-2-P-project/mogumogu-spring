@@ -1,63 +1,80 @@
 version: '3'
 services:
-  articleservice:
-    image: joowojr/article-service:latest
-    container_name: articleservice
+  eureka:
+    image: joowojr/eureka-service:latest
+    container_name: eureka
     ports:
-      - 8081:8080
+      - 8761:8761
+    networks:
+      - msa-network
+  gateway:
+    image: joowojr/gateway-service:latest
+    container_name: gateway
+    ports:
+      - 8080:8080
     depends_on:
       - eureka
-      - gateway
     networks:
       - msa-network
     restart: on-failure
-
-  messageservice:
-    image: joowojr/message-service:latest
-    container_name: messageservice
-    ports:
-      - 8082:8080
-    depends_on:
-      - eureka
-      - gateway
-    networks:
-      - msa-network
-    restart: on-failure
-
-  transactionservice:
-    image: joowojr/transaction-service:latest
-    container_name: transactionservice
-    ports:
-      - 8083:8080
-    depends_on:
-      - eureka
-      - gateway
-    networks:
-      - msa-network
-    restart: on-failure
-
-  userservice:
-    image: joowojr/user-service:latest
-    container_name: userservice
-    ports:
-      - 8084:8080
-    depends_on:
-      - eureka
-      - gateway
-    networks:
-      - msa-network
-    restart: on-failure
-  joinservice:
-    image: joowojr/join-service:latest
-    container_name: joinservice
-    ports:
-      - 8085:8080
-    depends_on:
-      - eureka
-      - gateway
-    networks:
-      - msa-network
-    restart: on-failure
+#  articleservice:
+#    image: joowojr/article-service:latest
+#    container_name: articleservice
+#    ports:
+#      - 8081:8080
+#    depends_on:
+#      - eureka
+#      - gateway
+#    networks:
+#      - msa-network
+#    restart: on-failure
+#
+#  messageservice:
+#    image: joowojr/message-service:latest
+#    container_name: messageservice
+#    ports:
+#      - 8082:8080
+#    depends_on:
+#      - eureka
+#      - gateway
+#    networks:
+#      - msa-network
+#    restart: on-failure
+#
+#  transactionservice:
+#    image: joowojr/transaction-service:latest
+#    container_name: transactionservice
+#    ports:
+#      - 8083:8080
+#    depends_on:
+#      - eureka
+#      - gateway
+#    networks:
+#      - msa-network
+#    restart: on-failure
+#
+#  userservice:
+#    image: joowojr/user-service:latest
+#    container_name: userservice
+#    ports:
+#      - 8084:8080
+#    depends_on:
+#      - eureka
+#      - gateway
+#    networks:
+#      - msa-network
+#    restart: on-failure
+#  joinservice:
+#    image: joowojr/join-service:latest
+#    container_name: joinservice
+#    ports:
+#      - 8085:8080
+#    depends_on:
+#      - eureka
+#      - gateway
+#    networks:
+#      - msa-network
+#    restart: on-failure
 
 networks:
   msa-network:
