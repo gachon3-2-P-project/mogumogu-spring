@@ -21,9 +21,9 @@ import java.security.SecureRandom;
 import java.util.Optional;
 import java.util.Random;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 @Transactional(readOnly = true)
 public class JoinService {
     private final UserRepository userRepository;
