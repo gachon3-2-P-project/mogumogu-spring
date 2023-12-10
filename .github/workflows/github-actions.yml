@@ -10,152 +10,152 @@ permissions:
   contents: read
 
 jobs:
-#  eureka:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Set up JDK 17
-#        uses: actions/setup-java@v3
-#        with:
-#          java-version: '17'
-#          distribution: 'temurin'
-#      # 2) 스프링 프로젝트 jar 파일 빌드
-#      - name: Build with Gradle
-#        run: |
-#          chmod +x gradlew
-#          ./gradlew eureka:bootjar
-#      ## 3) Docker Hub에 이미지 push 하기
-#      - name: Docker build and release
-#        run: |
-#          cd ./eureka
-#          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#          docker build -t ${{ secrets.DOCKER_USERNAME }}/eureka-service .
-#          docker push ${{ secrets.DOCKER_USERNAME }}/eureka-service:latest
-#      ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
-#      - name : EC2 Docker Run # docker compose
-#        uses: appleboy/ssh-action@master
-#        with:
-#          username: ubuntu
-#          host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
-#          key: ${{ secrets.EC2_KEY }} # pem 키
-#          script: |
-#            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#            docker rmi ${{ secrets.DOCKER_USERNAME }}/eureka-service:latest
-#            docker pull ${{ secrets.DOCKER_USERNAME }}/eureka-service:latest
-#  gateway:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Set up JDK 17
-#        uses: actions/setup-java@v3
-#        with:
-#          java-version: '17'
-#          distribution: 'temurin'
-#      ## 2) 스프링 프로젝트 jar 파일 빌드
-#      - name: Build with Gradle
-#        run: |
-#          chmod +x gradlew
-#          ./gradlew gateway:bootjar
-#      ## 3) Docker Hub에 이미지 push 하기
-#      - name: Docker build and release
-#        run: |
-#          cd ./gateway
-#          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#          docker build -t ${{ secrets.DOCKER_USERNAME }}/gateway-service .
-#          docker push ${{ secrets.DOCKER_USERNAME }}/gateway-service:latest
-#      ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
-#      - name: EC2 Docker Run # docker compose
-#        uses: appleboy/ssh-action@master
-#        with:
-#          username: ubuntu
-#          host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
-#          key: ${{ secrets.EC2_KEY }} # pem 키
-#          script: |
-#            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#            docker rmi ${{ secrets.DOCKER_USERNAME }}/gateway-service:latest
-#            docker pull ${{ secrets.DOCKER_USERNAME }}/gateway-service:latest
-#  auth:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Set up JDK 17
-#        uses: actions/setup-java@v3
-#        with:
-#          java-version: '17'
-#          distribution: 'temurin'
-#      ## 1) application.yml 세팅
-#      - name: Set application-dev.yml
-#        uses: microsoft/variable-substitution@v1
-#        with:
-#          files: ./auth/src/main/resources/application-dev.yml
-#        env:
-#          spring.datasource.url : ${{secrets.DB_URL}}
-#          spring.datasource.username : ${{secrets.DB_USER}}
-#          spring.datasource.password : ${{secrets.DB_PASSWORD}}
-#      ## 2) 스프링 프로젝트 jar 파일 빌드
-#      - name: Build with Gradle
-#        run: |
-#          chmod +x gradlew
-#          ./gradlew auth:bootjar
-#      ## 3) Docker Hub에 이미지 push 하기
-#      - name: Docker build and release
-#        run: |
-#          cd ./auth
-#          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#          docker build -t ${{ secrets.DOCKER_USERNAME }}/auth-service .
-#          docker push ${{ secrets.DOCKER_USERNAME }}/auth-service:latest
-#      ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
-#      - name: EC2 Docker Run # docker compose
-#        uses: appleboy/ssh-action@master
-#        with:
-#          username: ubuntu
-#          host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
-#          key: ${{ secrets.EC2_KEY }} # pem 키
-#          script: |
-#            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#            docker rmi ${{ secrets.DOCKER_USERNAME }}/auth-service:latest
-#            docker pull ${{ secrets.DOCKER_USERNAME }}/auth-service:latest
-#  user:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Set up JDK 17
-#        uses: actions/setup-java@v3
-#        with:
-#          java-version: '17'
-#          distribution: 'temurin'
-#      ## 1) application.yml 세팅
-#      - name: Set application-dev.yml
-#        uses: microsoft/variable-substitution@v1
-#        with:
-#          files: ./user/src/main/resources/application-dev.yml
-#        env:
-#          spring.datasource.url : ${{secrets.DB_URL}}
-#          spring.datasource.username : ${{secrets.DB_USER}}
-#          spring.datasource.password : ${{secrets.DB_PASSWORD}}
-#      ## 2) 스프링 프로젝트 jar 파일 빌드
-#      - name: Build with Gradle
-#        run: |
-#          chmod +x gradlew
-#          ./gradlew user:bootjar
-#      ## 3) Docker Hub에 이미지 push 하기
-#      - name: Docker build and release
-#        run: |
-#          cd ./user
-#          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#          docker build -t ${{ secrets.DOCKER_USERNAME }}/user-service .
-#          docker push ${{ secrets.DOCKER_USERNAME }}/user-service:latest
-#      ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
-#      - name: EC2 Docker Run # docker compose
-#        uses: appleboy/ssh-action@master
-#        with:
-#          username: ubuntu
-#          host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
-#          key: ${{ secrets.EC2_KEY }} # pem 키
-#          script: |
-#            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#            docker rmi ${{ secrets.DOCKER_USERNAME }}/user-service:latest
-#            docker pull ${{ secrets.DOCKER_USERNAME }}/user-service:latest
+  eureka:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      # 2) 스프링 프로젝트 jar 파일 빌드
+      - name: Build with Gradle
+        run: |
+          chmod +x gradlew
+          ./gradlew eureka:bootjar
+      ## 3) Docker Hub에 이미지 push 하기
+      - name: Docker build and release
+        run: |
+          cd ./eureka
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/eureka-service .
+          docker push ${{ secrets.DOCKER_USERNAME }}/eureka-service:latest
+      ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
+      - name : EC2 Docker Run # docker compose
+        uses: appleboy/ssh-action@master
+        with:
+          username: ubuntu
+          host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
+          key: ${{ secrets.EC2_KEY }} # pem 키
+          script: |
+
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/eureka-service:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/eureka-service:latest
+  gateway:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      ## 2) 스프링 프로젝트 jar 파일 빌드
+      - name: Build with Gradle
+        run: |
+          chmod +x gradlew
+          ./gradlew gateway:bootjar
+      ## 3) Docker Hub에 이미지 push 하기
+      - name: Docker build and release
+        run: |
+          cd ./gateway
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/gateway-service .
+          docker push ${{ secrets.DOCKER_USERNAME }}/gateway-service:latest
+      ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
+      - name: EC2 Docker Run # docker compose
+        uses: appleboy/ssh-action@master
+        with:
+          username: ubuntu
+          host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
+          key: ${{ secrets.EC2_KEY }} # pem 키
+          script: |
+
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/gateway-service:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/gateway-service:latest
+  auth:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      ## 1) application.yml 세팅
+      - name: Set application-dev.yml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./auth/src/main/resources/application-dev.yml
+        env:
+          spring.datasource.url : ${{secrets.DB_URL}}
+          spring.datasource.username : ${{secrets.DB_USER}}
+          spring.datasource.password : ${{secrets.DB_PASSWORD}}
+      ## 2) 스프링 프로젝트 jar 파일 빌드
+      - name: Build with Gradle
+        run: |
+          chmod +x gradlew
+          ./gradlew auth:bootjar
+      ## 3) Docker Hub에 이미지 push 하기
+      - name: Docker build and release
+        run: |
+          cd ./auth
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/auth-service .
+          docker push ${{ secrets.DOCKER_USERNAME }}/auth-service:latest
+      ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
+      - name: EC2 Docker Run # docker compose
+        uses: appleboy/ssh-action@master
+        with:
+          username: ubuntu
+          host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
+          key: ${{ secrets.EC2_KEY }} # pem 키
+          script: |
+
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/auth-service:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/auth-service:latest
+  user:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      ## 1) application.yml 세팅
+      - name: Set application-dev.yml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./user/src/main/resources/application-dev.yml
+        env:
+          spring.datasource.url : ${{secrets.DB_URL}}
+          spring.datasource.username : ${{secrets.DB_USER}}
+          spring.datasource.password : ${{secrets.DB_PASSWORD}}
+      ## 2) 스프링 프로젝트 jar 파일 빌드
+      - name: Build with Gradle
+        run: |
+          chmod +x gradlew
+          ./gradlew user:bootjar
+      ## 3) Docker Hub에 이미지 push 하기
+      - name: Docker build and release
+        run: |
+          cd ./user
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/user-service .
+          docker push ${{ secrets.DOCKER_USERNAME }}/user-service:latest
+      ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
+      - name: EC2 Docker Run # docker compose
+        uses: appleboy/ssh-action@master
+        with:
+          username: ubuntu
+          host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
+          key: ${{ secrets.EC2_KEY }} # pem 키
+          script: |
+
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/user-service:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/user-service:latest
   article:
     runs-on: ubuntu-latest
     steps:
@@ -196,108 +196,108 @@ jobs:
           script: |
             docker rmi ${{ secrets.DOCKER_USERNAME }}/article-service:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/article-service:latest
-#  message:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Set up JDK 17
-#        uses: actions/setup-java@v3
-#        with:
-#          java-version: '17'
-#          distribution: 'temurin'
-#      ## 1) application.yml 세팅
-#      - name: Set application-dev.yml
-#        uses: microsoft/variable-substitution@v1
-#        with:
-#          files: ./message/src/main/resources/application-dev.yml
-#        env:
-#          spring.datasource.url : ${{secrets.DB_URL}}
-#          spring.datasource.username : ${{secrets.DB_USER}}
-#          spring.datasource.password : ${{secrets.DB_PASSWORD}}
-#      ## 2) 스프링 프로젝트 jar 파일 빌드
-#      - name: Build with Gradle
-#        run: |
-#          chmod +x gradlew
-#          ./gradlew message:bootjar
-#      ## 3) Docker Hub에 이미지 push 하기
-#      - name: Docker build and release
-#        run: |
-#          cd ./message
-#          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#          docker build -t ${{ secrets.DOCKER_USERNAME }}/message-service .
-#          docker push ${{ secrets.DOCKER_USERNAME }}/message-service:latest
-#      ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
-#      - name: EC2 Docker Run # docker compose
-#        uses: appleboy/ssh-action@master
-#        with:
-#          username: ubuntu
-#          host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
-#          key: ${{ secrets.EC2_KEY }} # pem 키
-#          script: |
-#            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#            docker rmi ${{ secrets.DOCKER_USERNAME }}/message-service:latest
-#            docker pull ${{ secrets.DOCKER_USERNAME }}/message-service:latest
-#  transaction:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Set up JDK 17
-#        uses: actions/setup-java@v3
-#        with:
-#          java-version: '17'
-#          distribution: 'temurin'
-#      ## 1) application.yml 세팅
-#      - name: Set application-dev.yml
-#        uses: microsoft/variable-substitution@v1
-#        with:
-#          files: ./transaction/src/main/resources/application-dev.yml
-#        env:
-#          spring.datasource.url : ${{secrets.DB_URL}}
-#          spring.datasource.username : ${{secrets.DB_USER}}
-#          spring.datasource.password : ${{secrets.DB_PASSWORD}}
-#      ## 2) 스프링 프로젝트 jar 파일 빌드
-#      - name: Build with Gradle
-#        run: |
-#          chmod +x gradlew
-#          ./gradlew transaction:bootjar
-#      ## 3) Docker Hub에 이미지 push 하기
-#      - name: Docker build and release
-#        run: |
-#          cd ./transaction
-#          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#          docker build -t ${{ secrets.DOCKER_USERNAME }}/transaction-service .
-#          docker push ${{ secrets.DOCKER_USERNAME }}/transaction-service:latest
-#      ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
-#      - name: EC2 Docker Run
-#        uses: appleboy/ssh-action@master
-#        with:
-#          username: ubuntu
-#          host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
-#          key: ${{ secrets.EC2_KEY }} # pem 키
-#          script: |
-#            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#            docker rmi ${{ secrets.DOCKER_USERNAME }}/transaction-service:latest
-#            docker pull ${{ secrets.DOCKER_USERNAME }}/transaction-service:latest
-#  compose:
-#    needs: [eureka, gateway, user, article, message, transaction, authc]
-#    runs-on: ubuntu-latest
-#    timeout-minutes: 30
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Set up JDK 17
-#        uses: actions/setup-java@v3
-#        with:
-#          java-version: '17'
-#          distribution: 'temurin'
-#      - name: Docker Compose # docker compose
-#        uses: appleboy/ssh-action@master
-#        with:
-#          username: ubuntu
-#          host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
-#          key: ${{ secrets.EC2_KEY }} # pem 키
-#          script: |
-#            cd ~/mogumogu-msa
-#            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#            docker rm -f $(docker ps -aq)
-#            docker-compose up
-#            docker image prune -f
+  message:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      ## 1) application.yml 세팅
+      - name: Set application-dev.yml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./message/src/main/resources/application-dev.yml
+        env:
+          spring.datasource.url : ${{secrets.DB_URL}}
+          spring.datasource.username : ${{secrets.DB_USER}}
+          spring.datasource.password : ${{secrets.DB_PASSWORD}}
+      ## 2) 스프링 프로젝트 jar 파일 빌드
+      - name: Build with Gradle
+        run: |
+          chmod +x gradlew
+          ./gradlew message:bootjar
+      ## 3) Docker Hub에 이미지 push 하기
+      - name: Docker build and release
+        run: |
+          cd ./message
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/message-service .
+          docker push ${{ secrets.DOCKER_USERNAME }}/message-service:latest
+      ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
+      - name: EC2 Docker Run # docker compose
+        uses: appleboy/ssh-action@master
+        with:
+          username: ubuntu
+          host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
+          key: ${{ secrets.EC2_KEY }} # pem 키
+          script: |
+
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/message-service:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/message-service:latest
+  transaction:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      ## 1) application.yml 세팅
+      - name: Set application-dev.yml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./transaction/src/main/resources/application-dev.yml
+        env:
+          spring.datasource.url : ${{secrets.DB_URL}}
+          spring.datasource.username : ${{secrets.DB_USER}}
+          spring.datasource.password : ${{secrets.DB_PASSWORD}}
+      ## 2) 스프링 프로젝트 jar 파일 빌드
+      - name: Build with Gradle
+        run: |
+          chmod +x gradlew
+          ./gradlew transaction:bootjar
+      ## 3) Docker Hub에 이미지 push 하기
+      - name: Docker build and release
+        run: |
+          cd ./transaction
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/transaction-service .
+          docker push ${{ secrets.DOCKER_USERNAME }}/transaction-service:latest
+      ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
+      - name: EC2 Docker Run
+        uses: appleboy/ssh-action@master
+        with:
+          username: ubuntu
+          host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
+          key: ${{ secrets.EC2_KEY }} # pem 키
+          script: |
+
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/transaction-service:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/transaction-service:latest
+  compose:
+    needs: [eureka, gateway, user, article, message, transaction, authc]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Docker Compose # docker compose
+        uses: appleboy/ssh-action@master
+        with:
+          username: ubuntu
+          host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
+          key: ${{ secrets.EC2_KEY }} # pem 키
+          script: |
+            cd ~/mogumogu-msa
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker rm -f $(docker ps -aq)
+            docker-compose up
+            docker image prune -f
