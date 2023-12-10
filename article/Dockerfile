@@ -1,11 +1,12 @@
 FROM openjdk:17-jdk
 # 베이스 이미지, 빌드 할 이미지가 어떤 이미지를 기반으로 하고 있는지
-WORKDIR ./article/application
-COPY ./article/build/libs/app-0.0.1-SNAPSHOT.jar application.jar
+WORKDIR article/application
+ARG JAR_FILE=article/build/libs/*.jar
+COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
 FROM openjdk:17-jdk
-WORKDIR ./article/application
+WORKDIR article/application
 COPY --from=builder ./article/application/dependencies/ ./
 COPY --from=builder ./article/application/spring-boot-loader/ ./
 COPY --from=builder ./article/application/snapshot-dependencies/ ./
