@@ -46,7 +46,7 @@ public class AuthController {
         //로그
         log.info("createMember 진입");
         log.info("userRequestDto의 username : " + userRequestDto.getUsername());
-        UserDto.UserResponseDto user = userService.createUser(userRequestDto);
+        UserDto.UserResponseDto user = authService.createUser(userRequestDto);
         log.info("userResponseDto의 username : " + user.getUsername());
         return ResponseEntity.ok().body(user);
     }
