@@ -1,7 +1,8 @@
 FROM openjdk:17-jdk as builder
 # 베이스 이미지, 빌드 할 이미지가 어떤 이미지를 기반으로 하고 있는지
 WORKDIR application
-COPY ./article/build/libs/app-0.0.1-SNAPSHOT.jar application.jar
+ARG JAR_FILE=build/libs/*.jar
+COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
 FROM openjdk:17-jdk
