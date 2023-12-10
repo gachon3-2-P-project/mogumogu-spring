@@ -297,9 +297,8 @@ jobs:
           script: |
             cd ~/mogumogu-spring
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker rm -f $(docker ps -aq)
-            docker-compose docker-compose-gate.yml up
-            docker image prune -f
+#            docker rm -f $(docker ps -aq)
+            docker-compose -f docker-compose.gate.yml up
   compose2:
     needs : [compose1]
     runs-on: ubuntu-latest
@@ -320,5 +319,4 @@ jobs:
           script: |
             cd ~/mogumogu-spring
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker-compose -f docker-compose-api.yml up
-            docker image prune -f
+            docker-compose -f docker-compose.api.yml up
