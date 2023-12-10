@@ -1,5 +1,22 @@
 version: '3'
 services:
+  eureka:
+    image: joowojr/eureka-service:latest
+    container_name: eureka
+    ports:
+      - 8761:8761
+    networks:
+      - msa-network
+  gateway:
+    image: joowojr/gateway-service:latest
+    container_name: gateway
+    ports:
+      - 8080:8080
+    depends_on:
+      - eureka
+    networks:
+      - msa-network
+    restart: on-failure
   articleservice:
     image: joowojr/article-service:latest
     container_name: articleservice
@@ -58,6 +75,7 @@ services:
     networks:
       - msa-network
     restart: on-failure
+
 networks:
   msa-network:
     external: true

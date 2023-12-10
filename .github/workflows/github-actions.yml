@@ -276,7 +276,7 @@ jobs:
           script: |
             docker rmi -${{ secrets.DOCKER_USERNAME }}/transaction-service:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/transaction-service:latest
-  compose1:
+  compose:
     needs: [eureka, gateway, user, article, message, transaction, join]
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -297,7 +297,7 @@ jobs:
             cd ~/mogumogu-spring
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 #            docker rm -f $(docker ps -aq)
-            docker-compose -f docker-compose-gate.yml up -d
+            docker-compose up -d
 #  compose2:
 #    needs : [compose1]
 #    runs-on: ubuntu-latest
