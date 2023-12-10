@@ -112,7 +112,6 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
-
             docker rmi ${{ secrets.DOCKER_USERNAME }}/join-service:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/join-service:latest
   user:
@@ -298,7 +297,7 @@ jobs:
             cd ~/mogumogu-spring
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 #            docker rm -f $(docker ps -aq)
-            docker-compose -f docker-compose.gate.yml up -d
+            docker-compose -f docker-compose-gate.yml up -d
 #  compose2:
 #    needs : [compose1]
 #    runs-on: ubuntu-latest
