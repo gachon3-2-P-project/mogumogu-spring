@@ -289,4 +289,6 @@ jobs:
           username: ubuntu
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
-          script: "docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} && docker-compose up"
+          script: |
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker-compose up -d
