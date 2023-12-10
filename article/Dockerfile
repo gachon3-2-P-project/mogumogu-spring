@@ -5,7 +5,7 @@ COPY ./article/build/libs/app-0.0.1-SNAPSHOT.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
 FROM openjdk:17-jdk
-WORKDIR application
+WORKDIR ./article/application
 COPY --from=builder ./article/application/dependencies/ ./
 COPY --from=builder ./article/application/spring-boot-loader/ ./
 COPY --from=builder ./article/application/snapshot-dependencies/ ./

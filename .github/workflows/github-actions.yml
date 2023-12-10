@@ -196,7 +196,7 @@ jobs:
           script: |
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker rmi ${{ secrets.DOCKER_USERNAME }}/article-service:latest
-#            docker pull ${{ secrets.DOCKER_USERNAME }}/article-service:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/article-service:latest
 #  message:
 #    runs-on: ubuntu-latest
 #    steps:
