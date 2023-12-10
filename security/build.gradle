@@ -6,9 +6,6 @@ jar {
     enabled = true
 }
 dependencies {
-    //GOOGLE SMTP
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.0.5'
-    implementation 'javax.mail:javax.mail-api:1.6.2'
     //security
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
