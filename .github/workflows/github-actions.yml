@@ -295,7 +295,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker-compose -f mogumogu-spring/docker-compose.gate.yml up
+            docker-compose -f ./docker-compose.gate.yml up
 #  compose2:
 #    needs : [compose1]
 #    runs-on: ubuntu-latest
