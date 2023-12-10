@@ -194,7 +194,6 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker rmi ${{ secrets.DOCKER_USERNAME }}/article-service:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/article-service:latest
 #  message:
