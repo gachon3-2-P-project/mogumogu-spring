@@ -1,4 +1,7 @@
 bootJar{
+    layered {
+        includeLayerTools = True
+    }
 }
 dependencies {
     implementation project(':domain')
