@@ -1,8 +1,5 @@
 FROM openjdk:17-jdk as builder
 # 베이스 이미지, 빌드 할 이미지가 어떤 이미지를 기반으로 하고 있는지
-ENV DOCKERIZE_VERSION v0.2.0
-RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 WORKDIR application
 ARG JAR_FILE=build/libs/*.jar
