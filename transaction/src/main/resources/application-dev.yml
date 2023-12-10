@@ -1,13 +1,31 @@
 server:
   port: 0
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 spring:
   application:
     name: transaction-service
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        show_sql: true
+        format_sql: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${aws.db.url}
     username: ${aws.db.username}
     password: ${aws.db.password}
+jwt:
+  secret: 가천모구모구
+  expiration-time: 864000000 # 10 days
+  token-prefix: Bearer
+  header-string: Authorization
 eureka:
   client:
     register-with-eureka: true
