@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  eurek:
+  eureka:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,6 +24,7 @@ jobs:
         run: |
             touch ./eureka/src/main/resources/application-dev.yml
             echo "${{ secrets.EUREKA_YML }}" > ./eureka/src/main/resources/application-dev.yml
+        shell: bash
       # 2) 스프링 프로젝트 jar 파일 빌드
       - name: Build with Gradle
         run: |
