@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk
+FROM openjdk:17-jdk as builder
 # 베이스 이미지, 빌드 할 이미지가 어떤 이미지를 기반으로 하고 있는지
 WORKDIR ./article/application
 ARG JAR_FILE=./article/build/libs/*.jar
