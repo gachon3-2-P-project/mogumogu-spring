@@ -275,8 +275,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
-
-            docker rmi ${{ secrets.DOCKER_USERNAME }}/transaction-service:latest
+            docker rmi -${{ secrets.DOCKER_USERNAME }}/transaction-service:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/transaction-service:latest
   compose:
     needs: [eureka, gateway, user, article, message, transaction, auth]
