@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  eureka:
+  eurek:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
