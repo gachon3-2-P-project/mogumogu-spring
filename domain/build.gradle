@@ -7,6 +7,8 @@ jar {
 }
 dependencies {
     implementation project(':common')
+    //Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
     //MapStruct
     implementation 'org.mapstruct:mapstruct:1.4.1.Final'
     implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'

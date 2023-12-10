@@ -47,9 +47,9 @@ services:
     networks:
       - msa-network
     restart: on-failure
-  authservice:
-    image: joowojr/auth-service:latest
-    container_name: authservice
+  joinservice:
+    image: joowojr/join-service:latest
+    container_name: joinservice
     ports:
       - 8085:8080
     depends_on:

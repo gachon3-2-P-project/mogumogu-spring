@@ -1,4 +1,4 @@
 rootProject.name = 'server'
-include('common', 'domain', 'config')
+include('common', 'domain', 'security')
 include('gateway', 'eureka')
-include('auth','user', 'article', 'message', 'transaction')
+include('join','user', 'article', 'message', 'transaction')
