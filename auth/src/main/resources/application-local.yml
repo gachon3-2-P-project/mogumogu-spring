@@ -8,6 +8,14 @@ spring:
     url: ${aws.db.url}
     username: ${aws.db.username}
     password: ${aws.db.password}
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        show_sql: true
+        format_sql: true
 eureka:
   client:
     register-with-eureka: true

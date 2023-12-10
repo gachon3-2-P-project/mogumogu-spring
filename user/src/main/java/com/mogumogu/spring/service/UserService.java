@@ -20,27 +20,6 @@ public class UserService {
 //    @Value("${spring.mail.auth-code-expiration-millis}")
 //    private long authCodeExpirationMillis;
 //
-//    /**
-//     * 회원 생성
-//     */
-//    @Transactional
-//    public UserDto.UserResponseDto createUser(UserDto.UserRequestDto userRequestDto) {
-//
-//
-//        //encoding
-//        if (userRequestDto.getPassword() != null)
-//            userRequestDto.setPassword(bCryptPasswordEncoder.encode(userRequestDto.getPassword()));
-//        // RequestDto -> Entity
-//        UserEntity userEntity = userMapper.toRequestEntity(userRequestDto);
-//        userEntity.setRole(Role.USER);
-//
-//        // DB에 Entity 저장
-//        UserEntity savedUser = userRepository.save(userEntity);
-//
-//        // Entity -> ResponseDto
-//
-//        return userMapper.toResponseDto(savedUser);
-//    }
 //
 //    /**
 //     * 회원 id로 회원 조회

@@ -8,6 +8,7 @@ spring:
     url: ${aws.db.url}
     username: ${aws.db.username}
     password: ${aws.db.password}
+
 eureka:
   client:
     register-with-eureka: true
