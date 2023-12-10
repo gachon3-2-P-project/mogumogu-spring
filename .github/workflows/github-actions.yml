@@ -318,4 +318,4 @@ jobs:
 #          script: |
 #            cd ~/mogumogu-spring
 #            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#            docker-compose -f docker-compose.api.yml up -d
+#            docker-compose -f docker-compose-api.yml up -d
