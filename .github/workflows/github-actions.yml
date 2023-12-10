@@ -1,6 +1,8 @@
 name: mogumogu DEV CI/CD
 
 on:
+  push:
+    branches: [ "actions" ]
   pull_request:
     branches: [ "actions" ]
 
