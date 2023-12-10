@@ -22,9 +22,8 @@ jobs:
       ## 1) git ignore에 등록된 application.properties 파일 생성해주기
       - name: make application-dev.yml
         run: |
-            cd ./eureka/src/main/resources
-            touch ./application-dev.yml
-            echo "${{ secrets.EUREKA_YML }}" > ./application-dev.yml
+            touch ./eureka/src/main/resources/application-dev.yml
+            echo "${{ secrets.EUREKA_YML }}" > ./eureka/src/main/resources/application-dev.yml
       # 2) 스프링 프로젝트 jar 파일 빌드
       - name: Build with Gradle
         run: |
