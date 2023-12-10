@@ -1,5 +1,18 @@
+bootJar{
+    layered {
+        includeLayerTools = true
+    }
+}
 dependencies {
+    implementation project(':domain')
     implementation project(':common')
+    implementation project(':security')
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Eureka
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 }
 
 

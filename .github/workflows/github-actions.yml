@@ -19,13 +19,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      #      ## 1) git ignore에 등록된 application.properties 파일 생성해주기
-      #      - name: make application-dev.yml
-      #        run: |
-      #          cd ./eureka/src/main/resources
-      #          touch ./application-dev.yml
-      #          echo "${{ secrets.EUREKA_YML }}" > ./application-dev.yml
-      ## 2) 스프링 프로젝트 jar 파일 빌드
+      # 2) 스프링 프로젝트 jar 파일 빌드
       - name: Build with Gradle
         run: |
           chmod +x gradlew
@@ -35,7 +29,7 @@ jobs:
         run: |
           cd ./eureka
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/eureka-service . 
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/eureka-service .
           docker push ${{ secrets.DOCKER_USERNAME }}/eureka-service:latest
       ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
       - name : EC2 Docker Run # docker compose
@@ -45,7 +39,6 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker rmi ${{ secrets.DOCKER_USERNAME }}/eureka-service:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/eureka-service:latest
   gateway:
@@ -57,13 +50,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      #      ## 1) git ignore에 등록된 application.properties 파일 생성해주기
-      #      - name: make application-dev.yml
-      #        run: |
-      #          cd ./gateway/src/main/resources
-      #          touch ./application-dev.yml
-      #          echo "${{ secrets.GATEWAY_YML }}" > ./application-dev.yml
-
       ## 2) 스프링 프로젝트 jar 파일 빌드
       - name: Build with Gradle
         run: |
@@ -74,7 +60,7 @@ jobs:
         run: |
           cd ./gateway
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/gateway-service . 
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/gateway-service .
           docker push ${{ secrets.DOCKER_USERNAME }}/gateway-service:latest
       ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
       - name: EC2 Docker Run # docker compose
@@ -84,9 +70,48 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker rmi ${{ secrets.DOCKER_USERNAME }}/gateway-service:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/gateway-service:latest
+  join:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      ## 1) application.yml 세팅
+      - name: Set application-dev.yml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./join/src/main/resources/application-dev.yml
+        env:
+          spring.datasource.url : ${{secrets.DB_URL}}
+          spring.datasource.username : ${{secrets.DB_USER}}
+          spring.datasource.password : ${{secrets.DB_PASSWORD}}
+      ## 2) 스프링 프로젝트 jar 파일 빌드
+      - name: Build with Gradle
+        run: |
+          chmod +x gradlew
+          ./gradlew join:bootjar
+      ## 3) Docker Hub에 이미지 push 하기
+      - name: Docker build and release
+        run: |
+          cd ./join
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/join-service .
+          docker push ${{ secrets.DOCKER_USERNAME }}/join-service:latest
+      ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
+      - name: EC2 Docker Run # docker compose
+        uses: appleboy/ssh-action@master
+        with:
+          username: ubuntu
+          host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
+          key: ${{ secrets.EC2_KEY }} # pem 키
+          script: |
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/join-service:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/join-service:latest
   user:
     runs-on: ubuntu-latest
     steps:
@@ -96,13 +121,15 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-        #      ## 1) git ignore에 등록된 application.properties 파일 생성해주기
-        #      - name: make application-dev.yml
-        #        run: |
-        #          cd ./user/src/main/resources
-        #          touch ./application-dev.yml
-        #          echo "${{ secrets.USER_YML }}" > ./application-dev.yml
-
+      ## 1) application.yml 세팅
+      - name: Set application-dev.yml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./user/src/main/resources/application-dev.yml
+        env:
+          spring.datasource.url: ${{secrets.DB_URL}}
+          spring.datasource.username: ${{secrets.DB_USER}}
+          spring.datasource.password: ${{secrets.DB_PASSWORD}}
       ## 2) 스프링 프로젝트 jar 파일 빌드
       - name: Build with Gradle
         run: |
@@ -113,7 +140,7 @@ jobs:
         run: |
           cd ./user
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/user-service . 
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/user-service .
           docker push ${{ secrets.DOCKER_USERNAME }}/user-service:latest
       ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
       - name: EC2 Docker Run # docker compose
@@ -123,7 +150,6 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker rmi ${{ secrets.DOCKER_USERNAME }}/user-service:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/user-service:latest
   article:
@@ -135,13 +161,15 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      #      ## 1) git ignore에 등록된 application.properties 파일 생성해주기
-      #      - name: make application-dev.yml
-      #        run: |
-      #          cd ./article/src/main/resources
-      #          touch ./application-dev.yml
-      #          echo "${{ secrets.ARTICLE_YML }}" > ./application-dev.yml
-
+      ## 1) application.yml 세팅
+      - name: Set application-dev.yml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./article/src/main/resources/application-dev.yml
+        env:
+          spring.datasource.url : ${{secrets.DB_URL}}
+          spring.datasource.username : ${{secrets.DB_USER}}
+          spring.datasource.password : ${{secrets.DB_PASSWORD}}
       ## 2) 스프링 프로젝트 jar 파일 빌드
       - name: Build with Gradle
         run: |
@@ -152,7 +180,7 @@ jobs:
         run: |
           cd ./article
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/article-service . 
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/article-service .
           docker push ${{ secrets.DOCKER_USERNAME }}/article-service:latest
       ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
       - name: EC2 Docker Run # docker compose
@@ -162,7 +190,6 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker rmi ${{ secrets.DOCKER_USERNAME }}/article-service:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/article-service:latest
   message:
@@ -174,13 +201,15 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      #      ## 1) git ignore에 등록된 application.properties 파일 생성해주기
-      #      - name: make application-dev.yml
-      #        run: |
-      #          cd ./message/src/main/resources
-      #          touch ./application-dev.yml
-      #          echo "${{ secrets.MESSAGE_YML }}" > ./application-dev.yml
-
+      ## 1) application.yml 세팅
+      - name: Set application-dev.yml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./message/src/main/resources/application-dev.yml
+        env:
+          spring.datasource.url : ${{secrets.DB_URL}}
+          spring.datasource.username : ${{secrets.DB_USER}}
+          spring.datasource.password : ${{secrets.DB_PASSWORD}}
       ## 2) 스프링 프로젝트 jar 파일 빌드
       - name: Build with Gradle
         run: |
@@ -191,7 +220,7 @@ jobs:
         run: |
           cd ./message
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/message-service . 
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/message-service .
           docker push ${{ secrets.DOCKER_USERNAME }}/message-service:latest
       ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
       - name: EC2 Docker Run # docker compose
@@ -201,7 +230,6 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker rmi ${{ secrets.DOCKER_USERNAME }}/message-service:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/message-service:latest
   transaction:
@@ -213,13 +241,15 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      #      ## 1) git ignore에 등록된 application.properties 파일 생성해주기
-      #      - name: make application-dev.yml
-      #        run: |
-      #          cd ./transaction/src/main/resources
-      #          touch ./application-dev.yml
-      #          echo "${{ secrets.TRANSACTION_YML }}" > ./application-dev.yml
-
+      ## 1) application.yml 세팅
+      - name: Set application-dev.yml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./transaction/src/main/resources/application-dev.yml
+        env:
+          spring.datasource.url : ${{secrets.DB_URL}}
+          spring.datasource.username : ${{secrets.DB_USER}}
+          spring.datasource.password : ${{secrets.DB_PASSWORD}}
       ## 2) 스프링 프로젝트 jar 파일 빌드
       - name: Build with Gradle
         run: |
@@ -230,7 +260,7 @@ jobs:
         run: |
           cd ./transaction
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/transaction-service . 
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/transaction-service .
           docker push ${{ secrets.DOCKER_USERNAME }}/transaction-service:latest
       ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
       - name: EC2 Docker Run
@@ -240,11 +270,10 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker rmi ${{ secrets.DOCKER_USERNAME }}/transaction-service:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/transaction-service:latest
   compose:
-    needs: [eureka, gateway, user, article, message, transaction]
+    needs: [eureka, gateway, user, article, message, transaction, join]
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -254,14 +283,12 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Docker Compose # docker compose
+      - name: Docker Compose
         uses: appleboy/ssh-action@master
         with:
           username: ubuntu
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
-            cd ~/mogumogu-msa
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker rm -f $(docker ps -aq)
-            docker-compose up
+            docker-compose up -d

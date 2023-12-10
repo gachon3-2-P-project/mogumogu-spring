@@ -1,0 +1,13 @@
+dependencies {
+    implementation project(':domain')
+    implementation project(':common')
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // Eureka
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    //mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    //GOOGLE SMTP
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.0.5'
+    implementation 'javax.mail:javax.mail-api:1.6.2'
+}
