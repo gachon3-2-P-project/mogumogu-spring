@@ -14,6 +14,12 @@ public class JoinController {
 
     private final JoinService joinService;
 
+    @GetMapping("/test")
+    public String test() {
+        log.info("join - Test()");
+        return "Join - Test()";
+    }
+
     /**
      * 가천대 이메일 인증 코드 전송
      */
@@ -38,16 +44,16 @@ public class JoinController {
         }
     }
 
-    /**
-     * 회원 가입
-     */
-    @PostMapping(value = "/join")
-    public ResponseEntity<?> createUser(@RequestBody UserDto.UserRequestDto userRequestDto) {
-        //로그
-        log.info("createMember 진입");
-        log.info("userRequestDto의 username : " + userRequestDto.getUsername());
-        UserDto.UserResponseDto user = joinService.createUser(userRequestDto);
-        log.info("userResponseDto의 username : " + user.getUsername());
-        return ResponseEntity.ok().body(user);
-    }
+//    /**
+//     * 회원 가입
+//     */
+//    @PostMapping(value = "")
+//    public ResponseEntity<?> createUser(@RequestBody UserDto.UserRequestDto userRequestDto) {
+//        //로그
+//        log.info("createMember 진입");
+//        log.info("userRequestDto의 username : " + userRequestDto.getUsername());
+//        UserDto.UserResponseDto user = joinService.createUser(userRequestDto);
+//        log.info("userResponseDto의 username : " + user.getUsername());
+//        return ResponseEntity.ok().body(user);
+//    }
 }

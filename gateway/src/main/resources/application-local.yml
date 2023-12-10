@@ -34,6 +34,12 @@ spring:
             - Path=/api/user/**
           filters:
             - RewritePath=/api/user/(?<segment>.*), /$\{segment}
+        - id: join-service
+          uri: lb://JOIN-SERVICE
+          predicates:
+            - Path=/api/join/**
+          filters:
+            - RewritePath=/api/join/(?<segment>.*), /$\{segment}
 eureka:
   instance:
     instance-id: ${spring.cloud.client.ip-address}:${server.port}
