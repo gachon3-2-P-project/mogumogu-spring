@@ -39,7 +39,6 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
-
             docker rmi ${{ secrets.DOCKER_USERNAME }}/eureka-service:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/eureka-service:latest
   gateway:
@@ -71,7 +70,6 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
-
             docker rmi ${{ secrets.DOCKER_USERNAME }}/gateway-service:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/gateway-service:latest
   join:
@@ -152,7 +150,6 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
-
             docker rmi ${{ secrets.DOCKER_USERNAME }}/user-service:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/user-service:latest
   article:
@@ -233,7 +230,6 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
-
             docker rmi ${{ secrets.DOCKER_USERNAME }}/message-service:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/message-service:latest
   transaction:
@@ -274,7 +270,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
-            docker rmi -${{ secrets.DOCKER_USERNAME }}/transaction-service:latest
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/transaction-service:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/transaction-service:latest
   compose:
     needs: [eureka, gateway, user, article, message, transaction, join]
