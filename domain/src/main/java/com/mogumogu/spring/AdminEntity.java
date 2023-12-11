@@ -14,7 +14,7 @@ public class AdminEntity implements PersonEntity {
 
     @Id
     @Column(name = "admin_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String username; //관리자 아이디
