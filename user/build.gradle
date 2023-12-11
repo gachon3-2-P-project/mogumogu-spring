@@ -8,11 +8,6 @@ dependencies {
     implementation project(':domain')
     implementation project(':security')
 
-    //mail
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-    //GOOGLE SMTP
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.0.5'
-    implementation 'javax.mail:javax.mail-api:1.6.2'
 }
 tasks.named('bootBuildImage') {
     builder = 'paketobuildpacks/builder-jammy-base:latest'

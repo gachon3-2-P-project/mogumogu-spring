@@ -1,11 +1,11 @@
 package com.mogumogu.spring.service;
 
+import com.mogumogu.spring.EmailAuth;
+import com.mogumogu.spring.UserEntity;
 import com.mogumogu.spring.constant.Role;
 import com.mogumogu.spring.dto.UserDto;
 import com.mogumogu.spring.exception.BusinessLogicException;
 import com.mogumogu.spring.exception.ExceptionCode;
-import com.mogumogu.spring.EmailAuth;
-import com.mogumogu.spring.UserEntity;
 import com.mogumogu.spring.mapper.UserMapper;
 import com.mogumogu.spring.repository.EmailRepository;
 import com.mogumogu.spring.repository.UserRepository;

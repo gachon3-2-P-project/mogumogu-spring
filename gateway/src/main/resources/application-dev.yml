@@ -22,12 +22,12 @@ spring:
             # 콤마(,)를 기준으로 왼쪽 url을 오른쪽 url로 재정의한다.
             # 콤마 기준 오른쪽 부분은 ${변수명}으로 url 가져오고 앞에 / 붙여준거라고 보면 된다.
             - RewritePath=/api/article/(?<segment>.*), /$\{segment}
-        - id: auth-service # article-service/로 요청이 들어오면
+        - id: join-service # article-service/로 요청이 들어오면
           uri: lb://JOIN-SERVICE
           predicates:
-            - Path=/api/auth/**
+            - Path=/api/join/**
           filters:
-            - RewritePath=/api/auth/(?<segment>.*), /$\{segment}
+            - RewritePath=/api/join/(?<segment>.*), /$\{segment}
         - id: transaction-service
           uri: lb://TRANSACTION-SERVICE
           predicates:
@@ -50,7 +50,7 @@ jwt:
   secret: 가천모구모구
   expiration-time: 864000000 # 10 days
   token-prefix: Bearer
-  header-string: Authorization
+  header-string: joinorization
 eureka:
   client:
     register-with-eureka: true
