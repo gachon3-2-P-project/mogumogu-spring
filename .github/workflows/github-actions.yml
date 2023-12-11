@@ -53,7 +53,7 @@ jobs:
       - name: Set application-dev.yml
         uses: microsoft/variable-substitution@v1
         with:
-          files: ./transaction/src/main/resources/application-dev.yml
+          files: ./gateway/src/main/resources/application-dev.yml
         env:
           spring.datasource.url: ${{secrets.DB_URL}}
           spring.datasource.username: ${{secrets.DB_USER}}
@@ -305,5 +305,5 @@ jobs:
           script: |
             cd ~/mogumogu-spring
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker-compose up 
+            docker-compose up -d
             docker image prune -af
