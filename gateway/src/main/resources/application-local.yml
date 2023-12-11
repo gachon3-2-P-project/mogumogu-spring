@@ -1,8 +1,14 @@
 spring:
   main:
     web-application-type: reactive
+    allow-bean-definition-overriding: true
   application:
     name: gateway-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${aws.db.url}
+    username: ${aws.db.username}
+    password: ${aws.db.password}
   cloud:
     gateway:
       routes:
@@ -34,12 +40,18 @@ spring:
             - Path=/api/user/**
           filters:
             - RewritePath=/api/user/(?<segment>.*), /$\{segment}
-        - id: join-service
+        - id: auth-service
           uri: lb://JOIN-SERVICE
           predicates:
-            - Path=/api/join/**
+            - Path=/api/auth/**
           filters:
-            - RewritePath=/api/join/(?<segment>.*), /$\{segment}
+            - RewritePath=/api/auth/(?<segment>.*), /$\{segment}
+jwt:
+  secret: 가천모구모구
+  expiration-time: 864000000 # 10 days
+  token-prefix: Bearer
+  header-string: Authorization
+
 eureka:
   instance:
     instance-id: ${spring.cloud.client.ip-address}:${server.port}

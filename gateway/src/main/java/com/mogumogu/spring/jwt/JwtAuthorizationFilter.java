@@ -2,8 +2,8 @@ package com.mogumogu.spring.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.mogumogu.spring.PersonEntity;
 import com.mogumogu.spring.auth.PrincipalDetails;
+import com.mogumogu.spring.PersonEntity;
 import com.mogumogu.spring.repository.AdminRepository;
 import com.mogumogu.spring.repository.UserRepository;
 import jakarta.servlet.FilterChain;

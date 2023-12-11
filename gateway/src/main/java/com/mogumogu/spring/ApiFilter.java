@@ -1,4 +1,4 @@
-package com.mogumogu.gateway;
+package com.mogumogu.spring;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
