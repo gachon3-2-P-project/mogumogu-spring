@@ -20,17 +20,17 @@ public class JoinController {
         return "Join - Test()";
     }
 
-    /**
-     * 가천대 이메일 인증 코드 전송
-     */
-    @PostMapping("/emails/verification-requests")
-    public ResponseEntity<?> sendMessage(@RequestParam("email") String email) {
-
-        log.info("----");
-        joinService.sendCodeToEmail(email);
-
-        return ResponseEntity.ok().body(email + "로 메일이 전송되었습니다.");
-    }
+//    /**
+//     * 가천대 이메일 인증 코드 전송
+//     */
+//    @PostMapping("/emails/verification-requests")
+//    public ResponseEntity<?> sendMessage(@RequestParam("email") String email) {
+//
+//        log.info("----");
+//        joinService.sendCodeToEmail(email);
+//
+//        return ResponseEntity.ok().body(email + "로 메일이 전송되었습니다.");
+//    }
 
     @GetMapping("/emails/verifications")
     public ResponseEntity<?> verificationEmail(@RequestParam("email") String email,
@@ -47,13 +47,17 @@ public class JoinController {
     /**
      * 회원 가입
      */
-    @PostMapping(value = "/process")
+    @PostMapping(value = "/join")
     public ResponseEntity<?> createUser(@RequestBody UserDto.UserRequestDto userRequestDto) {
         //로그
+
+        String email = userRequestDto.getUsername();
+        joinService.sendCodeToEmail(email);
         log.info("createMember 진입");
         log.info("userRequestDto의 username : " + userRequestDto.getUsername());
         UserDto.UserResponseDto user = joinService.createUser(userRequestDto);
         log.info("userResponseDto의 username : " + user.getUsername());
-        return ResponseEntity.ok().body(user);
+
+        return ResponseEntity.ok().body(email + "로 메일이 전송되었습니다.");
     }
 }
