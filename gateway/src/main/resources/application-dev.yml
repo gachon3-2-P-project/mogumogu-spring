@@ -1,8 +1,14 @@
 spring:
   main:
     web-application-type: reactive
+    allow-bean-definition-overriding: true
   application:
     name: gateway-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${aws.db.url}
+    username: ${aws.db.username}
+    password: ${aws.db.password}
   cloud:
     gateway:
       routes:
