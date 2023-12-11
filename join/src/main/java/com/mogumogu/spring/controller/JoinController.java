@@ -34,7 +34,7 @@ public class JoinController {
     /**
      * 회원 가입
      */
-    @PostMapping(value = "/join")
+    @PostMapping(value = "/process")
     public ResponseEntity<?> createUser(@RequestBody UserDto.UserRequestDto userRequestDto) {
         //로그
 
