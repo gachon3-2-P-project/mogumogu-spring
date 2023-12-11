@@ -40,12 +40,12 @@ spring:
             - Path=/api/user/**
           filters:
             - RewritePath=/api/user/(?<segment>.*), /$\{segment}
-        - id: auth-service
+        - id: join-service
           uri: lb://JOIN-SERVICE
           predicates:
-            - Path=/api/auth/**
+            - Path=/api/join/**
           filters:
-            - RewritePath=/api/auth/(?<segment>.*), /$\{segment}
+            - RewritePath=/api/join/(?<segment>.*), /$\{segment}
 jwt:
   secret: 가천모구모구
   expiration-time: 864000000 # 10 days
