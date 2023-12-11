@@ -15,7 +15,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -60,7 +62,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(new AntPathRequestMatcher("/api/admin/**")).hasRole("ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/api/user/**")).hasAnyRole("ADMIN", "USER")  //ROLE_ 자동으로 붙여짐
-                        .requestMatchers(new AntPathRequestMatcher("/api/join")).permitAll() //회원가입 접근 가능하게
+                        .requestMatchers(new AntPathRequestMatcher("/api/join/**")).permitAll() //회원가입 접근 가능하게
                         .anyRequest().permitAll())
                 .build();
 
