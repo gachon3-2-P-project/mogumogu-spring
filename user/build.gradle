@@ -3,16 +3,16 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    // jwt2
-    implementation(group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2')
-    implementation(group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2')
-    implementation(group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2')
-    implementation 'javax.xml.bind:jaxb-api:2.3.0'
-    implementation 'com.auth0:java-jwt:4.2.1'
 
     implementation project(':common')
     implementation project(':domain')
     implementation project(':security')
+
+    //mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    //GOOGLE SMTP
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.0.5'
+    implementation 'javax.mail:javax.mail-api:1.6.2'
 }
 tasks.named('bootBuildImage') {
     builder = 'paketobuildpacks/builder-jammy-base:latest'

@@ -7,7 +7,7 @@ server:
       force: true
 spring:
   application:
-    name: join-service
+    name: auth-service
   jpa:
     hibernate:
       ddl-auto: create

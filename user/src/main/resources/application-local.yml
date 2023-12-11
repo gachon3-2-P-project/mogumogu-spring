@@ -16,6 +16,27 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
         show_sql: true
         format_sql: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${aws.db.url}
+    username: ${aws.db.username}
+    password: ${aws.db.password}
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: gachonmogu@gmail.com
+    password: qubl vmoa kfjm dbid
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+    auth-code-expiration-millis: 600000  # 10 * 60 * 1000 == 10분
 jwt:
   secret: 가천모구모구
   expiration-time: 864000000 # 10 days

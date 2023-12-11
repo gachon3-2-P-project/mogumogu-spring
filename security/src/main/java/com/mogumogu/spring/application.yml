@@ -1,6 +1,0 @@
-# JWT
-jwt:
-  secret: 가천모구모구
-  expiration-time: 864000000 # 10 days
-  token-prefix: Bearer
-  header-string: Authorization

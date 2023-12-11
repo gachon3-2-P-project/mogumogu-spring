@@ -7,8 +7,6 @@ import com.mogumogu.spring.mapper.UserMapper;
 import com.mogumogu.spring.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.mogumogu.spring.dto.UserDto;
