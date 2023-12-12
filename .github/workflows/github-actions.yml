@@ -52,15 +52,15 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      ## 1) application.yml 세팅
-      - name: Set application-dev.yml
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: ./gateway/src/main/resources/application-dev.yml
-        env:
-          spring.datasource.url: ${{secrets.DB_URL}}
-          spring.datasource.username: ${{secrets.DB_USER}}
-          spring.datasource.password: ${{secrets.DB_PASSWORD}}
+#      ## 1) application.yml 세팅
+#      - name: Set application-dev.yml
+#        uses: microsoft/variable-substitution@v1
+#        with:
+#          files: ./gateway/src/main/resources/application-dev.yml
+#        env:
+#          spring.datasource.url: ${{secrets.DB_URL}}
+#          spring.datasource.username: ${{secrets.DB_USER}}
+#          spring.datasource.password: ${{secrets.DB_PASSWORD}}
       ## 2) 스프링 프로젝트 jar 파일 빌드
       - name: Build with Gradle
         run: |
