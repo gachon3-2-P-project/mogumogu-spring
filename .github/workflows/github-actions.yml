@@ -1,15 +1,19 @@
 name: mogumogu DEV CI/CD
 
 on:
+  push:
+    branches: ["prod"]
   pull_request:
-    types: [closed]
-  workflow_dispatch: # (2).수동 실행도 가능하도록
+    branches: ["prod"]
+#  pull_request:
+#    types: [closed]
+#  workflow_dispatch: # (2).수동 실행도 가능하도록
 permissions:
     contents: read
 jobs:
   eureka:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'prod'
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -41,7 +45,7 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/eureka-service:latest
   gateway:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'prod'
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -82,7 +86,7 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/gateway-service:latest
   join:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'prod'
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -123,7 +127,7 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/join-service:latest
   user:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'prod'
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -164,7 +168,7 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/user-service:latest
   article:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'prod'
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -205,7 +209,7 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/article-service:latest
   message:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'prod'
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -246,7 +250,7 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/message-service:latest
   transaction:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'prod'
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -288,7 +292,7 @@ jobs:
   compose:
     needs: [eureka, gateway, user, article, message, transaction, join]
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'prod'
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17

@@ -6,7 +6,6 @@ dependencies {
 
     implementation project(':common')
     implementation project(':domain')
-    implementation project(':security')
 
 }
 tasks.named('bootBuildImage') {
