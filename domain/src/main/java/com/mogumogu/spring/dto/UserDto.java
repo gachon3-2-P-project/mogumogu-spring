@@ -47,13 +47,9 @@ public class UserDto {
 
         private String username;
 
-//        private List<ArticleEntity> articles;
-//
-//        private List<MessageEntity> messages;
 
         private LocalTime createdAt;
 
-        private String emailCode;
 
     }
 

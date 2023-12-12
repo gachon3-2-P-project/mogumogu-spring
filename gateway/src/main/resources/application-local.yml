@@ -3,11 +3,11 @@ spring:
     web-application-type: reactive
   application:
     name: gateway-service
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${aws.db.url}
-    username: ${aws.db.username}
-    password: ${aws.db.password}
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: ${aws.db.url}
+#    username: ${aws.db.username}
+#    password: ${aws.db.password}
   cloud:
     gateway:
       routes:
@@ -21,30 +21,35 @@ spring:
             # 콤마(,)를 기준으로 왼쪽 url을 오른쪽 url로 재정의한다.
             # 콤마 기준 오른쪽 부분은 ${변수명}으로 url 가져오고 앞에 / 붙여준거라고 보면 된다.
             - RewritePath=/api/article/(?<segment>.*), /$\{segment}
+            - ApiFilter
         - id: transaction-service
           uri: lb://TRANSACTION-SERVICE
           predicates:
             - Path=/api/transaction/**
           filters:
             - RewritePath=/api/transaction/(?<segment>.*), /$\{segment}
+            - ApiFilter
         - id: message-service
           uri: lb://MESSAGE-SERVICE
           predicates:
             - Path=/api/message/**
           filters:
             - RewritePath=/api/message/(?<segment>.*), /$\{segment}
+            - ApiFilter
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
             - Path=/api/user/**
           filters:
             - RewritePath=/api/user/(?<segment>.*), /$\{segment}
+            - ApiFilter
         - id: join-service
           uri: lb://JOIN-SERVICE
           predicates:
             - Path=/api/join/**
           filters:
             - RewritePath=/api/join/(?<segment>.*), /$\{segment}
+            - ApiFilter
 #jwt:
 #  secret: 가천모구모구
 #  expiration-time: 864000000 # 10 days
