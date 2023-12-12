@@ -1,7 +1,11 @@
 package com.mogumogu.spring.controller;
 
+import com.mogumogu.spring.UserEntity;
 import com.mogumogu.spring.dto.UserDto;
+import com.mogumogu.spring.exception.BusinessLogicException;
+import com.mogumogu.spring.exception.ExceptionCode;
 import com.mogumogu.spring.repository.EmailRepository;
+import com.mogumogu.spring.repository.UserRepository;
 import com.mogumogu.spring.service.JoinService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class JoinController {
     private final JoinService joinService;
     private final EmailRepository emailRepository;
+    private final UserRepository userRepository;
 
     /**
      * 이메일 인증 요청
@@ -29,9 +34,14 @@ public class JoinController {
         boolean verificationResult = joinService.verifiedCode(email, authCode);
 
         if (verificationResult) {
+
+            UserEntity user = userRepository.findByUsername(email);
+
+            Long userId = user.getId();
+
             // 이메일 인증 성공 시 EmailAuth테이블의 해당 데이터 삭제 -> user테이블에는 데이터 존재
             emailRepository.deleteByEmail(email);
-            return ResponseEntity.ok().body(email + " 이메일이 성공적으로 인증되었습니다.");
+            return ResponseEntity.ok().body(email + " 이메일이 성공적으로 인증되었습니다." + "userId : " + userId);
         } else {
             return ResponseEntity.badRequest().body("이메일 인증에 실패했습니다. 올바른 인증 코드를 입력하세요.");
         }
