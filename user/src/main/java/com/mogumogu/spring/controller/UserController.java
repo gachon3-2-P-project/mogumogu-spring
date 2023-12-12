@@ -1,5 +1,6 @@
 package com.mogumogu.spring.controller;
 
+import com.mogumogu.spring.dto.ArticleDto;
 import com.mogumogu.spring.dto.UserDto;
 import com.mogumogu.spring.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,16 @@ public class UserController {
   public ResponseEntity<?> updateUser(@RequestParam("userId") Long userId, @RequestBody UserDto.UserPatchDto userPatchDto) {
     return ResponseEntity.ok().body(userService.updateUser(userId, userPatchDto));
   }
+
+  /**
+   * 유저 고유 id로 조회
+   */
+  @GetMapping("/getUserArticles")
+  public ResponseEntity<?> getUserArticles(@RequestParam("userId") Long userId) {
+    List<ArticleDto.ArticleResponseDto> articles = userService.getUserArticles(userId);
+    return ResponseEntity.ok().body(articles);
+  }
+
 
   /**
    * 사용자 탈퇴 기능
