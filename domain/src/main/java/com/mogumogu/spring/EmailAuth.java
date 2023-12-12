@@ -22,5 +22,5 @@ public class EmailAuth {
 
     private String authCode;
 
-
+    private Long authCodeExpirationMillis; //인증 코드 만료 시간
 }
