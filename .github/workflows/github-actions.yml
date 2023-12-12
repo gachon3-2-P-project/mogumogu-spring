@@ -6,7 +6,7 @@ on:
     workflow_dispatch:
 #  pull_request:
 #    types: [closed]
-#  workflow_dispatch: # (2).수동 실행도 가능하도
+#  workflow_dispatch: # (2).수동 실행도 가능하도록
 permissions:
     contents: read
 jobs:
