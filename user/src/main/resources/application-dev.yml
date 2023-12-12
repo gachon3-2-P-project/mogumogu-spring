@@ -22,11 +22,11 @@ spring:
         show_sql: true
         format_sql: true
 
-jwt:
-  secret: 가천모구모구
-  expiration-time: 864000000 # 10 days
-  token-prefix: Bearer
-  header-string: Authorization
+#jwt:
+#  secret: 가천모구모구
+#  expiration-time: 864000000 # 10 days
+#  token-prefix: Bearer
+#  header-string: Authorization
 eureka:
   client:
     register-with-eureka: true
