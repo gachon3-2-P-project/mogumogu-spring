@@ -22,5 +22,5 @@ public class AdminEntity implements PersonEntity {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private final Role role = Role.ADMIN;
+    private Role role = Role.ADMIN;
 }
