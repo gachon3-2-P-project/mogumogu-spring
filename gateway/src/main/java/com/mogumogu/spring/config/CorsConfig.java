@@ -22,6 +22,7 @@ public class CorsConfig implements WebMvcConfigurer {
 //        return new CorsFilter(source);
 //    }
 
+    //cors처리
     public static final String ALLOWED_METHOD_NAMES = "GET,HEAD,POST,PUT,DELETE,TRACE,OPTIONS,PATCH";
 
     @Override
