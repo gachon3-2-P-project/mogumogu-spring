@@ -30,4 +30,6 @@ public class MessageEntity extends TimeStamp {
     @Lob
     @Column(columnDefinition = "TEXT")
     private String content; //내용
+
+    private String sender; // 쪽지 발신자 닉네임
 }

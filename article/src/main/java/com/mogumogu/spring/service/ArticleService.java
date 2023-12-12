@@ -81,7 +81,7 @@ public class ArticleService {
             MessageDto.MessageResponseDto messageResponseDto = messageMapper.toResponseDto(messageEntity);
 
             messageResponseDto.setUserId(messageEntity.getUser().getId());
-            messageResponseDto.setNickName(messageEntity.getUser().getNickName());
+            //messageResponseDto.setNickName(messageEntity.getUser().getNickName());
 
             messageDtos.add(messageResponseDto);
         }
@@ -119,7 +119,7 @@ public class ArticleService {
                 MessageDto.MessageResponseDto messageResponseDto = messageMapper.toResponseDto(MessageEntity);
 
                 messageResponseDto.setUserId(MessageEntity.getUser().getId());
-                messageResponseDto.setNickName(MessageEntity.getUser().getNickName());
+                //messageResponseDto.setNickName(MessageEntity.getUser().getNickName());
 
                 MessageDtos.add(messageResponseDto);
             }
