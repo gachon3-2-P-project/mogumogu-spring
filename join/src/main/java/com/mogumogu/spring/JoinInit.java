@@ -2,6 +2,7 @@ package com.mogumogu.spring;
 
 import com.mogumogu.spring.constant.Role;
 import com.mogumogu.spring.repository.AdminRepository;
+import com.mogumogu.spring.repository.ArticleRepository;
 import com.mogumogu.spring.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -10,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 //@Component
 //@RequiredArgsConstructor
 //@Slf4j
@@ -17,12 +20,14 @@ import org.springframework.stereotype.Component;
 //
 //    private final UserRepository userRepository;
 //    private final AdminRepository adminRepository;
+//    private final ArticleRepository articleRepository;
 //    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 //
 //    @PostConstruct
 //    private void initFirst(){
 //        initAdmins();
 //        initUsers();
+//        initArticles();
 //    }
 //
 //    @Transactional
@@ -46,6 +51,21 @@ import org.springframework.stereotype.Component;
 //            user.setPassword(bCryptPasswordEncoder.encode("member" + i));
 //            user.setRole(Role.USER);
 //            userRepository.save(user);
+//        }
+//    }
+//
+//    @Transactional
+//    public void initArticles() {
+//        List<UserEntity> user = userRepository.findAll();
+//        for (int i = 0; i < 5; i++) {
+//            ArticleEntity article = new ArticleEntity();
+//            article.setUser(user.get(i));
+//            article.setTitle("제목" + i);
+//            article.setContent("Content");
+//            article.setNumberOfPeople(3);
+//            article.setCost(10000 * i);
+//            article.setComplain(0);
+//            articleRepository.save(article);
 //        }
 //    }
 //
