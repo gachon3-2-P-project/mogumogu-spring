@@ -1,4 +1,4 @@
-package com.mogumogu.spring.jwt;
+package com.mogumogu.spring;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -6,10 +6,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtProperties {
 
-    protected static String secret;
-    protected static Long expirationTime;
-    protected static String tokenPrefix;
-    protected static String headerString;
+    public static String secret;
+    public static Long expirationTime;
+    public static String tokenPrefix;
+    public static String headerString;
 
     @Value("${jwt.secret}")
     public void setSecret(String secret) {

@@ -1,16 +1,17 @@
-package com.mogumogu.spring.jwt;
+package com.mogumogu.spring.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mogumogu.spring.JwtProperties;
+import com.mogumogu.spring.PrincipalDetails;
+import com.mogumogu.spring.dto.LoginRequestDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import moguBackend.config.spring_security.auth.PrincipalDetails;
-import moguBackend.config.spring_security.dto.LoginRequestDto;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

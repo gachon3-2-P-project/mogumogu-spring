@@ -1,7 +1,7 @@
-package com.mogumogu.spring.auth;
+package com.mogumogu.spring;
+
 
 import lombok.extern.slf4j.Slf4j;
-import moguBackend.config.spring_security.PersonEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

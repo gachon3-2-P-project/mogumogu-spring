@@ -1,10 +1,8 @@
-package com.mogumogu.spring.auth;
+package com.mogumogu.spring;
 
+import com.mogumogu.spring.repository.AdminRepository;
+import com.mogumogu.spring.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import moguBackend.domain.entity.AdminEntity;
-import moguBackend.domain.entity.UserEntity;
-import moguBackend.repository.admin.AdminRepository;
-import moguBackend.repository.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
