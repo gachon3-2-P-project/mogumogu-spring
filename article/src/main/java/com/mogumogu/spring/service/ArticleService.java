@@ -1,5 +1,6 @@
 package com.mogumogu.spring.service;
 
+import com.mogumogu.spring.constant.Transaction;
 import com.mogumogu.spring.repository.ArticleRepository;
 import com.mogumogu.spring.exception.BusinessLogicException;
 import com.mogumogu.spring.exception.ExceptionCode;
@@ -41,6 +42,7 @@ public class ArticleService {
 
 
         ArticleEntity savedArticle = articleRepository.save(articleMapper.toReqeustEntity(articleRequestDto, userEntity));
+        savedArticle.setTransactionStatus(Transaction.RECRUITOPEN);
 
         ArticleDto.ArticleResponseDto responseDto = articleMapper.toResponseDto(savedArticle);
         responseDto.setUserId(userId);
@@ -208,6 +210,26 @@ public class ArticleService {
         }
     }
 
+    /**
+     * 사용자 입금 신청 버튼
+     */
+    @Transactional
+    public String depositButton(Long articleId) {
+        ArticleEntity article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
+
+        log.info("입금 자 count: {}", article.getDepositNumber());
+
+        if (article.getDepositNumber() >= article.getNumberOfPeople()) {
+            article.setTransactionStatus(Transaction.RECRUITCLOSED);
+            return "모집 마감";
+        } else {
+            int depositNumber = article.getDepositNumber();
+            depositNumber++;
+            article.setDepositNumber(depositNumber);
+            return "입금 신청 완료";
+        }
+    }
 
 
 

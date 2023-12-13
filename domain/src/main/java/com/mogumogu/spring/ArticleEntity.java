@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mogumogu.TimeStamp;
+import com.mogumogu.spring.constant.Transaction;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -41,6 +42,14 @@ public class ArticleEntity extends TimeStamp {
     private String productName; //상품명
 
     private Integer cost; //금액
+
+    @Enumerated(EnumType.STRING)
+    private Transaction transactionStatus = Transaction.RECRUITOPEN;
+
+    private Integer depositNumber; //입금 수
+
+    private Integer transactionNumber; //거래 완료 수
+
 
 
 
