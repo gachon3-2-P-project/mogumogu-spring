@@ -78,12 +78,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withClaim("username", principalDetailis.getPerson().getUsername())
                 .sign(Algorithm.HMAC512(JwtProperties.secret));
 
-        response.addHeader(JwtProperties.headerString, jwtToken);
+        //response.addHeader(JwtProperties.headerString, jwtToken);
 
         // 바디에도 토큰 정보 추가
         Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("token" , jwtToken);
         responseBody.put("username", principalDetailis.getPerson().getUsername());
-        responseBody.put("id", principalDetailis.getPerson().getId());
+        responseBody.put("userId", principalDetailis.getPerson().getId());
 
         response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
         response.getWriter().flush();
