@@ -27,14 +27,6 @@ public class MessageController {
     }
 
 
-    /**
-     * 쪽지 고유 id로 쪽지 조회
-     */
-    @GetMapping("/get")
-    public ResponseEntity<?> getMessage(@RequestParam("messageId") Long messageId) {
-        MessageDto.MessageResponseDto Message = messageService.getMessage(messageId);
-        return ResponseEntity.ok().body(Message);
-    }
 
     /**
      * 게시글Id로 작성된 쪽지 조회

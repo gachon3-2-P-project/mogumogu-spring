@@ -1,10 +1,15 @@
 package com.mogumogu.spring.controller;
 
+import com.mogumogu.spring.ArticleEntity;
+import com.mogumogu.spring.constant.Transaction;
+import com.mogumogu.spring.exception.BusinessLogicException;
+import com.mogumogu.spring.exception.ExceptionCode;
 import com.mogumogu.spring.service.ArticleService;
 import com.mogumogu.spring.dto.ArticleDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -93,6 +98,38 @@ public class ArticleController {
     public String test() {
         log.info("Article - Test()");
         return "Article - Test()";
+    }
+
+    /**
+     * 사용자 입금 신청 버튼
+     */
+    @PatchMapping("/deposit")
+    public ResponseEntity<?> depositButton(@RequestParam("articleId") Long articleId) {
+        return ResponseEntity.ok().body("모집 상태 : " + articleService.depositButton(articleId));
+    }
+
+    /**
+     * 거래 완료 버튼
+     */
+    @PatchMapping("/transactionComplete")
+    public ResponseEntity<?> transactionComplete(@RequestParam("articleId") Long articleId) {
+        return ResponseEntity.ok().body( articleService.completeButton(articleId));
+    }
+
+    /**
+     * 관리자 거래 승인 버튼
+     */
+    @PatchMapping("/admin/approve")
+    public ResponseEntity<?> adminApprove(@RequestParam("articleId") Long articleId) {
+        return ResponseEntity.ok().body( articleService.adminApprove(articleId));
+    }
+
+    /**
+     * 관리자 최종 완료 버튼
+     */
+    @PatchMapping("/admin/final")
+    public ResponseEntity<?> adminFinal(@RequestParam("articleId") Long articleId) {
+        return ResponseEntity.ok().body( articleService.adminFinal(articleId));
     }
 
 
