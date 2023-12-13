@@ -116,6 +116,22 @@ public class ArticleController {
         return ResponseEntity.ok().body( articleService.completeButton(articleId));
     }
 
+    /**
+     * 관리자 거래 승인 버튼
+     */
+    @PatchMapping("/admin/approve")
+    public ResponseEntity<?> adminApprove(@RequestParam("articleId") Long articleId) {
+        return ResponseEntity.ok().body( articleService.adminApprove(articleId));
+    }
+
+    /**
+     * 관리자 최종 완료 버튼
+     */
+    @PatchMapping("/admin/final")
+    public ResponseEntity<?> adminFinal(@RequestParam("articleId") Long articleId) {
+        return ResponseEntity.ok().body( articleService.adminFinal(articleId));
+    }
+
 
 
 }
