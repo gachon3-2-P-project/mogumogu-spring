@@ -2,6 +2,8 @@ package com.mogumogu.spring.controller;
 
 import com.mogumogu.spring.dto.ArticleDto;
 import com.mogumogu.spring.dto.UserDto;
+import com.mogumogu.spring.exception.BusinessLogicException;
+import com.mogumogu.spring.exception.ExceptionCode;
 import com.mogumogu.spring.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +36,13 @@ public class UserController {
    */
   @PatchMapping("/update")
   public ResponseEntity<?> updateUser(@RequestParam("userId") Long userId, @RequestBody UserDto.UserPatchDto userPatchDto) {
-    return ResponseEntity.ok().body(userService.updateUser(userId, userPatchDto));
+    try {
+      UserDto.UserResponseDto updatedUser = userService.updateUser(userId, userPatchDto);
+      return ResponseEntity.ok().body(updatedUser);
+    } catch (BusinessLogicException e) {
+
+      return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
+    }
   }
 
   /**
