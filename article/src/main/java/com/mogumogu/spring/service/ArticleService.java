@@ -43,6 +43,9 @@ public class ArticleService {
 
         ArticleEntity savedArticle = articleRepository.save(articleMapper.toReqeustEntity(articleRequestDto, userEntity));
         savedArticle.setTransactionStatus(Transaction.RECRUITOPEN);
+        savedArticle.setDepositNumber(0);
+        savedArticle.setTransactionNumber(0);
+
 
         ArticleDto.ArticleResponseDto responseDto = articleMapper.toResponseDto(savedArticle);
         responseDto.setUserId(userId);
