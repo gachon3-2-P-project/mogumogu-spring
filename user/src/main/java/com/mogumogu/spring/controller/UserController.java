@@ -77,6 +77,8 @@ public class UserController {
   /**
    * logout -> 시큐리티에서 처리
    */
+
+  //수정
   @GetMapping("/logout")
   public RedirectView redirectHandler() {
     log.info("로그아웃 시작");
