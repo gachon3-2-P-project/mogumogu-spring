@@ -42,12 +42,6 @@ spring:
             - Path=/api/join/**
           filters:
             - RewritePath=/api/join/(?<segment>.*), /$\{segment}
-        - id: transaction-service
-          uri: lb://TRANSACTION-SERVICE
-          predicates:
-            - Path=/api/transaction/**
-          filters:
-            - RewritePath=/api/transaction/(?<segment>.*), /$\{segment}
         - id: message-service
           uri: lb://MESSAGE-SERVICE
           predicates:

@@ -22,13 +22,6 @@ spring:
             # 콤마 기준 오른쪽 부분은 ${변수명}으로 url 가져오고 앞에 / 붙여준거라고 보면 된다.
             - RewritePath=/api/article/(?<segment>.*), /$\{segment}
             - ApiFilter
-        - id: transaction-service
-          uri: lb://TRANSACTION-SERVICE
-          predicates:
-            - Path=/api/transaction/**
-          filters:
-            - RewritePath=/api/transaction/(?<segment>.*), /$\{segment}
-            - ApiFilter
         - id: message-service
           uri: lb://MESSAGE-SERVICE
           predicates:
