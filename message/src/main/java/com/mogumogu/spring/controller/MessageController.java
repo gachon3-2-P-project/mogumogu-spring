@@ -60,11 +60,4 @@ public class MessageController {
 
 
 
-    @GetMapping("/test")
-    public String test() {
-        log.info("Message - Test()");
-        return "Message - Test()";
-    }
-
-
 }
