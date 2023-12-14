@@ -1,4 +1,4 @@
 rootProject.name = 'mogumogu-spring'
-include('common', 'domain')
+include('common', 'domain', 'security')
 include('gateway', 'eureka')
 include('join','user', 'article', 'message')

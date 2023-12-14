@@ -4,7 +4,6 @@ import com.mogumogu.spring.JwtAuthenticationFilter;
 import com.mogumogu.spring.JwtAuthorizationFilter;
 import com.mogumogu.spring.repository.AdminRepository;
 import com.mogumogu.spring.repository.UserRepository;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,23 +51,9 @@ public class SecurityConfig {
                 .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository, adminRepository))
                // .addFilterBefore(new JwtExceptionHandlerFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
-                        .requestMatchers(new AntPathRequestMatcher("/**")).hasAnyRole("ADMIN","USER")
+                        .requestMatchers(new AntPathRequestMatcher("/**")).hasAnyRole("USER")
                         .anyRequest().permitAll())
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        //.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .addLogoutHandler((request, response, authentication) -> {
-                            HttpSession session = request.getSession(false);
-                            if (session != null) {
-                                session.invalidate();
-                            }
-                        })
-                        .logoutSuccessHandler((request, response, authentication) -> {
-                            response.sendRedirect("/");
-                        })
-                        .deleteCookies("remember-me")
-                )
                 .build();
+
     }
 }

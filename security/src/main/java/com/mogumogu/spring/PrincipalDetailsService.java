@@ -1,4 +1,4 @@
-package com.mogumogu.spring.security;
+package com.mogumogu.spring;
 
 import com.mogumogu.spring.AdminEntity;
 import com.mogumogu.spring.UserEntity;
