@@ -17,7 +17,6 @@ import java.util.List;
 //@RequiredArgsConstructor
 //@Slf4j
 //public class JoinInit {
-//
 //    private final UserRepository userRepository;
 //    private final AdminRepository adminRepository;
 //    private final ArticleRepository articleRepository;
