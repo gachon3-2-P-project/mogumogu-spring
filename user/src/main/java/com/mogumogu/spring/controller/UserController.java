@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 
@@ -71,6 +72,17 @@ public class UserController {
   public ResponseEntity<List<UserDto.UserResponseDto>> getAllUser() {
     List<UserDto.UserResponseDto> users = userService.getAllUser();
     return ResponseEntity.ok().body(users);
+  }
+
+  /**
+   * logout -> 시큐리티에서 처리
+   */
+  @GetMapping("/logout")
+  public RedirectView redirectHandler() {
+    log.info("로그아웃 시작");
+    RedirectView redirectView = new RedirectView();
+    redirectView.setUrl("http://dana-seo.shop:3000");
+    return redirectView;
   }
 
 }
