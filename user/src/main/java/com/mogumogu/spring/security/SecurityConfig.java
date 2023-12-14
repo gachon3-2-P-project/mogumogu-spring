@@ -2,6 +2,7 @@ package com.mogumogu.spring.security;
 
 import com.mogumogu.spring.repository.AdminRepository;
 import com.mogumogu.spring.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,20 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
          //               .requestMatchers(new AntPathRequestMatcher("/user/join")).permitAll() //회원가입 접근 가능하게
                         .anyRequest().permitAll())
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        //.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .addLogoutHandler((request, response, authentication) -> {
+                            HttpSession session = request.getSession(false);
+                            if (session != null) {
+                                session.invalidate();
+                            }
+                        })
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            response.sendRedirect("/");
+                        })
+                        .deleteCookies("remember-me")
+                )
                 .build();
-
     }
 }
