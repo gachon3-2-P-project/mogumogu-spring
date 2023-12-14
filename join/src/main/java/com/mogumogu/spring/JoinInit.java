@@ -32,42 +32,14 @@ import java.util.List;
 //
 //    @Transactional
 //    public void initAdmins() {
-//
 //        AdminEntity admin = new AdminEntity();
 //        admin.setUsername("admin_0"); //관리자아이디
 //        admin.setPassword(bCryptPasswordEncoder.encode("admin_" + 0));
 //        admin.setRole(Role.ADMIN);
 //        adminRepository.save(admin);
-//
-//
 //    }
 //
-//    @Transactional
-//    public void initUsers() {
-//        for (int i = 0; i < 5; i++) {
-//            UserEntity user = new UserEntity();
-//            user.setUsername("gachon" + (i+1) + "@gachon.ac.kr");
-//            user.setNickName("userNickname" + (i+1));
-//            user.setPassword(bCryptPasswordEncoder.encode("member" + i));
-//            user.setRole(Role.USER);
-//            userRepository.save(user);
-//        }
-//    }
 //
-//    @Transactional
-//    public void initArticles() {
-//        List<UserEntity> user = userRepository.findAll();
-//        for (int i = 0; i < 5; i++) {
-//            ArticleEntity article = new ArticleEntity();
-//            article.setUser(user.get(i));
-//            article.setTitle("제목" + i);
-//            article.setContent("Content");
-//            article.setNumberOfPeople(3);
-//            article.setCost(10000 * i);
-//            article.setComplain(0);
-//            articleRepository.save(article);
-//        }
-//    }
 //
 //
 //}
