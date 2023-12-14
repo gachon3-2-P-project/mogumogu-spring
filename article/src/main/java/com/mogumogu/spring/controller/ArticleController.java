@@ -94,12 +94,6 @@ public class ArticleController {
         return ResponseEntity.ok().body(articleService.updateArticle(articleId, articlePatchDto));
     }
 
-    @GetMapping("/test")
-    public String test() {
-        log.info("Article - Test()");
-        return "Article - Test()";
-    }
-
     /**
      * 사용자 입금 신청 버튼
      */
