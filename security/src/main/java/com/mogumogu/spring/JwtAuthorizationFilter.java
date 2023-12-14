@@ -1,4 +1,4 @@
-package com.mogumogu.spring.security;
+package com.mogumogu.spring;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

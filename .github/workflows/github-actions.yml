@@ -248,7 +248,7 @@ jobs:
             docker rmi ${{ secrets.DOCKER_USERNAME }}/message-service:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/message-service:latest
   compose:
-    needs: [eureka, gateway, user, article, message, transaction, join]
+    needs: [eureka, gateway, user, article, message, join]
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'prod'
     steps:
