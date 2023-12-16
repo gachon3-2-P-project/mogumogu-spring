@@ -53,7 +53,7 @@ public class SecurityConfig {
                // .addFilterBefore(new JwtExceptionHandlerFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
-//                        .requestMatchers(new AntPathRequestMatcher("/**")).hasAnyRole("ADMIN","USER")
+                        .requestMatchers(new AntPathRequestMatcher("/**")).hasAnyRole("ADMIN","USER")
                         .anyRequest().permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout")
