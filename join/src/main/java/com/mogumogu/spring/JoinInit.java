@@ -30,7 +30,7 @@ public class JoinInit {
     @Transactional
     public void initAdmins() {
         AdminEntity admin = new AdminEntity();
-        admin.setUsername("admin_"); //관리자아이디
+        admin.setUsername("admin_0"); //관리자아이디
         admin.setPassword(bCryptPasswordEncoder.encode("admin_" + 0));
         admin.setRole(Role.ADMIN);
         adminRepository.save(admin);
