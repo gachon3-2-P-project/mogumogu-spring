@@ -17,10 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -193,6 +190,7 @@ public class MessageService {
 
                     return messageResponseDto;
                 })
+                .sorted(Comparator.comparingLong(MessageDto.MessageResponseDto::getId))
                 .collect(Collectors.toList());
 
         return messageDtos;
