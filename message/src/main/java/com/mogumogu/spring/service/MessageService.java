@@ -99,7 +99,7 @@ public class MessageService {
 
         return allMessages.stream()
                 .filter(messageEntity -> {
-                    // receiver가 중복되면 결과에 추가하지 않음
+
                     String receiver = messageEntity.getReceiver();
                     String sender = messageEntity.getSender();
 
@@ -112,7 +112,7 @@ public class MessageService {
 
                     if (sender != null && !checkedSenders.contains(sender)) {
                         // userId와 senderId가 같은 경우에도 추가
-                        if (!sender.equals(userEntity.getNickName())) {
+                        if (sender.equals(userEntity.getNickName())) {
                             checkedSenders.add(sender);
                             return true;
                         }
