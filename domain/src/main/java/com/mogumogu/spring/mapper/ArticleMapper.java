@@ -29,6 +29,7 @@ public interface ArticleMapper {
     @Mapping(source = "article.id", target = "articleId")
     @Mapping(target = "receiverId", ignore = true)
     @Mapping(target = "senderId", ignore = true)
+    @Mapping(source = "article.title", target = "articleTitle")
     MessageDto.MessageResponseDto toMessageResponseDto(MessageEntity messageEntity);
 
 

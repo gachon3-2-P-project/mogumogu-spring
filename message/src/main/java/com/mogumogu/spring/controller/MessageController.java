@@ -39,12 +39,12 @@ public class MessageController {
 //    }
 
     /**
-     * 쪽지함 쪽지 조회
+     * 해당 게시물 쪽지 조회
      */
     @GetMapping("/getMessageStorage")
-    public ResponseEntity<List<ArticleDto.ArticleResponseDto>> getMessageStorage(@RequestParam Long userId) {
+    public ResponseEntity<List<MessageDto.MessageResponseDto>> getMessageStorage(@RequestParam Long userId) {
 
-        List<ArticleDto.ArticleResponseDto> articleResponses = messageService.getMessageStorage(userId);
+        List<MessageDto.MessageResponseDto> articleResponses = messageService.getMessageStorage(userId);
         return ResponseEntity.ok(articleResponses);
 
     }

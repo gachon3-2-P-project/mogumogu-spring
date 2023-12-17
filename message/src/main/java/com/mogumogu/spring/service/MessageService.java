@@ -78,92 +78,54 @@ public class MessageService {
         log.info("삭제된 Message: {}",messageId);
     }
 
-//    /**
-//     * 해당 게시물 쪽지 조회
-//     */
-//
-//    public List<MessageDto.MessageResponseDto> getArticleMessages(Long articleId) {
-//
-//        ArticleEntity articleEntity = articleRepository.findById(articleId)
-//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
-//
-//        // 게시물과 연관된 메시지들
-//        List<MessageEntity> messages = articleEntity.getMessages();
-//        List<MessageDto.MessageResponseDto> messageDtos = new ArrayList<>();
-//
-//        // 메시지들을 DTO로 변환하여 리스트에 추가
-//        for (MessageEntity messageEntity : messages) {
-//            MessageDto.MessageResponseDto messageResponseDto = new MessageDto.MessageResponseDto();
-//
-//            messageResponseDto.setArticleId(messageEntity.getArticle().getId());
-//            messageResponseDto.setUserId(messageEntity.getUser().getId());
-//            messageResponseDto.setId(messageEntity.getId());
-//            messageResponseDto.setContent(messageEntity.getContent());
-//            messageResponseDto.setSender(messageEntity.getSender());
-//            messageResponseDto.setReceiver(messageEntity.getReceiver());
-//            messageResponseDto.setCreatedAt(messageEntity.getCreatedAt());
-//
-//            // Receiver의 닉네임을 통해 Receiver의 ID 조회
-//            String receiverNickName = messageEntity.getReceiver();
-//            Long receiverId = userRepository.findIdByNickName(receiverNickName);
-//            messageResponseDto.setReceiverId(receiverId);
-//
-//            // Sender의 닉네임을 통해 Sender의 ID 조회
-//            String senderNickName = messageEntity.getSender();
-//            Long senderId = userRepository.findIdByNickName(senderNickName);
-//            messageResponseDto.setSenderId(senderId);
-//
-//            messageDtos.add(messageResponseDto);
-//
-//
-//            messageDtos.add(messageResponseDto);
-//        }
-//
-//        return messageDtos;
-//    }
-
-    /**
-     * 쪽지함 구현
-     */
-    public List<ArticleDto.ArticleResponseDto> getMessageStorage(Long userId) {
-
+    public List<MessageDto.MessageResponseDto> getMessageStorage(Long userId) {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
-        // 수신자로부터 온 메시지 조회
-        List<MessageEntity> receivedMessages = messageRepository.findByReceiver(userEntity.getNickName());
-
-        // 발신자로부터 온 메시지 조회
+        // 해당 사용자가 보낸 메시지 조회
         List<MessageEntity> sentMessages = messageRepository.findBySender(userEntity.getNickName());
 
-        Set<Long> processedArticleIds = new HashSet<>(); // 중복 체크를 위한 Set
+        log.info("Number of Sent Messages: {}", sentMessages.size());
 
-        List<ArticleDto.ArticleResponseDto> articleResponses = new ArrayList<>();
+        // 확인된 receiver를 저장하기 위한 Set
+        Set<String> checkedReceivers = new HashSet<>();
 
-        // 수신자로부터 온 메시지 처리
-        for (MessageEntity messageEntity : receivedMessages) {
-            // 중복된 게시물이 아직 처리되지 않았으면 처리하고, Set에 추가
-            if (processedArticleIds.add(messageEntity.getArticle().getId())) {
-                ArticleEntity articleEntity = articleRepository.findById(messageEntity.getArticle().getId())
-                        .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
-                ArticleDto.ArticleResponseDto articleResponse = articleMapper.toResponseDto(articleEntity);
-                articleResponses.add(articleResponse);
-            }
-        }
+        return sentMessages.stream()
+                .filter(messageEntity -> {
+                    // receiver가 중복되면 결과에 추가하지 않음
+                    String receiver = messageEntity.getReceiver();
+                    if (receiver != null && !checkedReceivers.contains(receiver)) {
+                        checkedReceivers.add(receiver);
+                        return true;
+                    }
+                    return false;
+                })
+                .map(messageEntity -> {
+                    MessageDto.MessageResponseDto messageResponseDto = messageMapper.toResponseDto(messageEntity);
 
-        // 발신자로부터 온 메시지 처리
-        for (MessageEntity messageEntity : sentMessages) {
-            // 중복된 게시물이 아직 처리되지 않았으면 처리하고, Set에 추가
-            if (processedArticleIds.add(messageEntity.getArticle().getId())) {
-                ArticleEntity articleEntity = articleRepository.findById(messageEntity.getArticle().getId())
-                        .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
-                ArticleDto.ArticleResponseDto articleResponse = articleMapper.toResponseDto(articleEntity);
-                articleResponses.add(articleResponse);
-            }
-        }
+                    // 해당 메시지가 속한 게시물 정보 추가
+                    ArticleEntity articleEntity = messageEntity.getArticle();
+                    if (articleEntity != null) {
+                        messageResponseDto.setArticleId(articleEntity.getId());
+                        messageResponseDto.setArticleTitle(articleEntity.getTitle());
+                    }
 
-        return articleResponses;
+                    // receiverId와 senderId 설정
+                    String receiverNickName = messageEntity.getReceiver();
+                    Long receiverId = userRepository.findIdByNickName(receiverNickName);
+                    messageResponseDto.setReceiverId(receiverId);
+
+                    String senderNickName = messageEntity.getSender();
+                    Long senderId = userRepository.findIdByNickName(senderNickName);
+                    messageResponseDto.setSenderId(senderId);
+
+
+                    return messageResponseDto;
+                })
+                .collect(Collectors.toList());
     }
+
+
 
     public List<MessageDto.MessageResponseDto> getArticleMessages(Long articleId, Long userId) {
         ArticleEntity articleEntity = articleRepository.findById(articleId)
@@ -195,11 +157,25 @@ public class MessageService {
         log.info("Number of All Messages: {}", allMessages.size());
 
         List<MessageDto.MessageResponseDto> messageDtos = allMessages.stream()
-                .map(messageEntity -> messageMapper.toResponseDto(messageEntity))
+                .map(messageEntity -> {
+                    MessageDto.MessageResponseDto messageResponseDto = messageMapper.toResponseDto(messageEntity);
+
+                    // receiverId와 senderId 설정
+                    String receiverNickName = messageEntity.getReceiver();
+                    Long receiverId = userRepository.findIdByNickName(receiverNickName);
+                    messageResponseDto.setReceiverId(receiverId);
+
+                    String senderNickName = messageEntity.getSender();
+                    Long senderId = userRepository.findIdByNickName(senderNickName);
+                    messageResponseDto.setSenderId(senderId);
+
+                    return messageResponseDto;
+                })
                 .collect(Collectors.toList());
 
         return messageDtos;
     }
+
 
 
 
