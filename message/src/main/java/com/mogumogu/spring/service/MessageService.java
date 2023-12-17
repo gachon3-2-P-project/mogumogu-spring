@@ -17,10 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -178,9 +175,11 @@ public class MessageService {
         allMessages.addAll(userMessages);
 
 
+
         List<MessageDto.MessageResponseDto> messageDtos = allMessages.stream()
                 .map(messageEntity -> {
                     MessageDto.MessageResponseDto messageResponseDto = messageMapper.toResponseDto(messageEntity);
+
 
                     // receiverId와 senderId 설정
                     String receiverNickName = messageEntity.getReceiver();
@@ -193,6 +192,7 @@ public class MessageService {
 
                     return messageResponseDto;
                 })
+                .sorted(Comparator.comparingLong(MessageDto.MessageResponseDto::getId)) // ID 순서대로 정렬
                 .collect(Collectors.toList());
 
         return messageDtos;
