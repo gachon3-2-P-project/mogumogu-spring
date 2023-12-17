@@ -85,19 +85,39 @@ public class MessageService {
         // 해당 사용자가 보낸 메시지 조회
         List<MessageEntity> sentMessages = messageRepository.findBySender(userEntity.getNickName());
 
-        log.info("Number of Sent Messages: {}", sentMessages.size());
+        // 해당 사용자가 받은 메시지 조회
+        List<MessageEntity> receivedMessages = messageRepository.findByReceiver(userEntity.getNickName());
 
-        // 확인된 receiver를 저장하기 위한 Set
+        // 받은 메시지와 보낸 메시지를 합친 후 중복을 제거
+        List<MessageEntity> allMessages = new ArrayList<>();
+        allMessages.addAll(sentMessages);
+        allMessages.addAll(receivedMessages);
+
+        // 확인된 receiver와 sender를 저장하기 위한 Set
         Set<String> checkedReceivers = new HashSet<>();
+        Set<String> checkedSenders = new HashSet<>();
 
-        return sentMessages.stream()
+        return allMessages.stream()
                 .filter(messageEntity -> {
-                    // receiver가 중복되면 결과에 추가하지 않음
+
                     String receiver = messageEntity.getReceiver();
+                    String sender = messageEntity.getSender();
+
                     if (receiver != null && !checkedReceivers.contains(receiver)) {
-                        checkedReceivers.add(receiver);
-                        return true;
+                        if (receiver.equals(userEntity.getNickName())) {
+                            checkedReceivers.add(receiver);
+                            return true;
+                        }
                     }
+
+                    if (sender != null && !checkedSenders.contains(sender)) {
+                        // userId와 senderId가 같은 경우에도 추가
+                        if (sender.equals(userEntity.getNickName())) {
+                            checkedSenders.add(sender);
+                            return true;
+                        }
+                    }
+
                     return false;
                 })
                 .map(messageEntity -> {
@@ -119,11 +139,14 @@ public class MessageService {
                     Long senderId = userRepository.findIdByNickName(senderNickName);
                     messageResponseDto.setSenderId(senderId);
 
-
                     return messageResponseDto;
                 })
                 .collect(Collectors.toList());
     }
+
+
+
+
 
 
 
