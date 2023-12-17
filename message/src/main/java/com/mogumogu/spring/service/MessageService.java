@@ -164,20 +164,19 @@ public class MessageService {
         // 게시물 작성자가 쪽지 보내는 사용자 메시지 가져오기
         List<MessageEntity> authorMessages = articleEntity.getMessages().stream()
                 .filter(messageEntity ->
-                        authorNickName.equals(messageEntity.getSender()) && userNickName.equals(messageEntity.getReceiver()))
+                        authorNickName.equals(messageEntity.getSender()) || userNickName.equals(messageEntity.getReceiver()))
                 .collect(Collectors.toList());
 
         // 사용자가 보낸 메시지 가져오기
         List<MessageEntity> userMessages = articleEntity.getMessages().stream()
-                .filter(messageEntity -> userNickName.equals(messageEntity.getSender()))
+                .filter(messageEntity -> userNickName.equals(messageEntity.getSender()) || userNickName.equals(messageEntity.getReceiver()))
                 .collect(Collectors.toList());
 
         // 두 리스트 합치기
-        List<MessageEntity> allMessages = new ArrayList<>();
+        Set<MessageEntity> allMessages = new HashSet<>();
         allMessages.addAll(authorMessages);
         allMessages.addAll(userMessages);
 
-        log.info("Number of All Messages: {}", allMessages.size());
 
         List<MessageDto.MessageResponseDto> messageDtos = allMessages.stream()
                 .map(messageEntity -> {
