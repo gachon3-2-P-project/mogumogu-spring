@@ -37,6 +37,8 @@ public class MessageDto {
 
         private String receiver; // 수신자 닉네임
 
+        private String articleTitle;
+
         private String content; //내용
 
         private LocalTime createdAt;

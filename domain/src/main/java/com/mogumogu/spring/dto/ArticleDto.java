@@ -73,6 +73,7 @@ public class ArticleDto {
         private Integer transactionNumber; //거래 완료 수
 
 
+
     }
 
     @Getter
