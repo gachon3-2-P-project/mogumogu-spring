@@ -17,10 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -176,6 +173,8 @@ public class MessageService {
         List<MessageEntity> allMessages = new ArrayList<>();
         allMessages.addAll(authorMessages);
         allMessages.addAll(userMessages);
+
+        allMessages.sort(Comparator.comparingLong(MessageEntity::getId));
 
         log.info("Number of All Messages: {}", allMessages.size());
 
