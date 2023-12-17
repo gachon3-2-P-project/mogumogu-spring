@@ -82,7 +82,7 @@ public class MessageService {
      * 해당 게시물 쪽지 조회
      */
 
-    public List<ArticleDto.ArticleResponseDto> getArticleMessages(Long articleId) {
+    public List<MessageDto.MessageResponseDto> getArticleMessages(Long articleId) {
 
         ArticleEntity articleEntity = articleRepository.findById(articleId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
@@ -93,20 +93,33 @@ public class MessageService {
 
         // 메시지들을 DTO로 변환하여 리스트에 추가
         for (MessageEntity messageEntity : messages) {
-            MessageDto.MessageResponseDto messageResponseDto = messageMapper.toResponseDto(messageEntity);
+            MessageDto.MessageResponseDto messageResponseDto = new MessageDto.MessageResponseDto();
 
+            messageResponseDto.setArticleId(messageEntity.getArticle().getId());
             messageResponseDto.setUserId(messageEntity.getUser().getId());
-            //messageResponseDto.setNickName(messageEntity.getUser().getNickName());
+            messageResponseDto.setId(messageEntity.getId());
+            messageResponseDto.setContent(messageEntity.getContent());
+            messageResponseDto.setSender(messageEntity.getSender());
+            messageResponseDto.setReceiver(messageEntity.getReceiver());
+            messageResponseDto.setCreatedAt(messageEntity.getCreatedAt());
+
+            // Receiver의 닉네임을 통해 Receiver의 ID 조회
+            String receiverNickName = messageEntity.getReceiver();
+            Long receiverId = userRepository.findIdByNickName(receiverNickName);
+            messageResponseDto.setReceiverId(receiverId);
+
+            // Sender의 닉네임을 통해 Sender의 ID 조회
+            String senderNickName = messageEntity.getSender();
+            Long senderId = userRepository.findIdByNickName(senderNickName);
+            messageResponseDto.setSenderId(senderId);
+
+            messageDtos.add(messageResponseDto);
+
 
             messageDtos.add(messageResponseDto);
         }
 
-        List<ArticleDto.ArticleResponseDto> result = new ArrayList<>();
-        ArticleDto.ArticleResponseDto articleResponseDto = articleMapper.toResponseDto(articleEntity);
-        articleResponseDto.setMessages(messageDtos);
-        result.add(articleResponseDto);
-
-        return result;
+        return messageDtos;
     }
 
     /**
@@ -152,76 +165,76 @@ public class MessageService {
         return articleResponses;
     }
 
-    /**
-     * 게시물 작성자가 해당 게시물에 작성한 메시지 조회
-     */
-
-    public List<MessageDto.MessageResponseDto> getArticleAuthorMessages(Long articleId, Long userId) {
-
-        ArticleEntity articleEntity = articleRepository.findById(articleId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
-
-        UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
-
-
-        //게시물 작성자의 닉네임 가져오기
-        String authorNickName = articleEntity.getUser().getNickName();
-        log.info(authorNickName);
-
-        //게시물 작성자가 쪽지 보내는 사용자 닉네임 가져오기
-        String userNickName = userEntity.getNickName();
-        log.info(userNickName);
-
-        //게시물 작성자가 보낸 메시지만 가져오기
-        List<MessageEntity> messages = articleEntity.getMessages().stream()
-                .filter(messageEntity -> authorNickName.equals(messageEntity.getSender()) && userNickName.equals(messageEntity.getReceiver()))
-                .collect(Collectors.toList());
-
-        log.info("Number of Messages for Author: {}", messages.size());
-
-
-        List<MessageDto.MessageResponseDto> messageDtos = messages.stream()
-                .map(messageEntity -> messageMapper.toResponseDto(messageEntity))
-                .collect(Collectors.toList());
-
-        return messageDtos;
-
-
-    }
-
-    /**
-     * 사용자가 해당 게시물에 작성한 메시지 조회
-     */
-
-    public List<MessageDto.MessageResponseDto> getArticleSenderMessages(Long articleId, Long userId) {
-
-        ArticleEntity articleEntity = articleRepository.findById(articleId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
-
-        UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
-
-        //사용자 닉네임 가져오기
-        String userNickName = userEntity.getNickName();
-        log.info(userNickName);
-
-        //게시물 작성자가 보낸 메시지만 가져오기
-        List<MessageEntity> messages = articleEntity.getMessages().stream()
-                .filter(messageEntity -> userNickName.equals(messageEntity.getSender()))
-                .collect(Collectors.toList());
-
-        log.info("Number of Messages for Author: {}", messages.size());
-
-
-        List<MessageDto.MessageResponseDto> messageDtos = messages.stream()
-                .map(messageEntity -> messageMapper.toResponseDto(messageEntity))
-                .collect(Collectors.toList());
-
-        return messageDtos;
-
-
-    }
+//    /**
+//     * 게시물 작성자가 해당 게시물에 작성한 메시지 조회
+//     */
+//
+//    public List<MessageDto.MessageResponseDto> getArticleAuthorMessages(Long articleId, Long userId) {
+//
+//        ArticleEntity articleEntity = articleRepository.findById(articleId)
+//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
+//
+//        UserEntity userEntity = userRepository.findById(userId)
+//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+//
+//
+//        //게시물 작성자의 닉네임 가져오기
+//        String authorNickName = articleEntity.getUser().getNickName();
+//        log.info(authorNickName);
+//
+//        //게시물 작성자가 쪽지 보내는 사용자 닉네임 가져오기
+//        String userNickName = userEntity.getNickName();
+//        log.info(userNickName);
+//
+//        //게시물 작성자가 보낸 메시지만 가져오기
+//        List<MessageEntity> messages = articleEntity.getMessages().stream()
+//                .filter(messageEntity -> authorNickName.equals(messageEntity.getSender()) && userNickName.equals(messageEntity.getReceiver()))
+//                .collect(Collectors.toList());
+//
+//        log.info("Number of Messages for Author: {}", messages.size());
+//
+//
+//        List<MessageDto.MessageResponseDto> messageDtos = messages.stream()
+//                .map(messageEntity -> messageMapper.toResponseDto(messageEntity))
+//                .collect(Collectors.toList());
+//
+//        return messageDtos;
+//
+//
+//    }
+//
+//    /**
+//     * 사용자가 해당 게시물에 작성한 메시지 조회
+//     */
+//
+//    public List<MessageDto.MessageResponseDto> getArticleSenderMessages(Long articleId, Long userId) {
+//
+//        ArticleEntity articleEntity = articleRepository.findById(articleId)
+//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
+//
+//        UserEntity userEntity = userRepository.findById(userId)
+//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+//
+//        //사용자 닉네임 가져오기
+//        String userNickName = userEntity.getNickName();
+//        log.info(userNickName);
+//
+//        //게시물 작성자가 보낸 메시지만 가져오기
+//        List<MessageEntity> messages = articleEntity.getMessages().stream()
+//                .filter(messageEntity -> userNickName.equals(messageEntity.getSender()))
+//                .collect(Collectors.toList());
+//
+//        log.info("Number of Messages for Author: {}", messages.size());
+//
+//
+//        List<MessageDto.MessageResponseDto> messageDtos = messages.stream()
+//                .map(messageEntity -> messageMapper.toResponseDto(messageEntity))
+//                .collect(Collectors.toList());
+//
+//        return messageDtos;
+//
+//
+//    }
 
 
 

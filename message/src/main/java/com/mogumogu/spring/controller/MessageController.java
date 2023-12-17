@@ -33,8 +33,8 @@ public class MessageController {
      */
 
     @GetMapping("/getArticleMessages")
-    public ResponseEntity<List<ArticleDto.ArticleResponseDto>> getArticleMessages(@RequestParam Long articleId) {
-        List<ArticleDto.ArticleResponseDto> articlesWithMessages = messageService.getArticleMessages(articleId);
+    public ResponseEntity<List<MessageDto.MessageResponseDto>> getArticleMessages(@RequestParam Long articleId) {
+        List<MessageDto.MessageResponseDto> articlesWithMessages = messageService.getArticleMessages(articleId);
         return ResponseEntity.ok().body(articlesWithMessages);
     }
 
@@ -58,27 +58,27 @@ public class MessageController {
         return ResponseEntity.ok().body("Deleted Message Id : " + messageId);
     }
 
-    /**
-     * 게시물 작성자가 해당 게시물에 작성한 메시지 조회
-     */
-    @GetMapping("/getArticleAuthorMessages")
-    public ResponseEntity<List<MessageDto.MessageResponseDto>> getArticleAuthorMessages(@RequestParam Long articleId, Long receiverUserId) {
-
-        List<MessageDto.MessageResponseDto> messageResponses = messageService.getArticleAuthorMessages(articleId, receiverUserId);
-        return ResponseEntity.ok(messageResponses);
-
-    }
-
-    /**
-     * 사용자가 해당 게시물에 작성한 메시지 조회
-     */
-    @GetMapping("/getArticleSenderMessages")
-    public ResponseEntity<List<MessageDto.MessageResponseDto>> getArticleSenderMessages(@RequestParam Long articleId, Long userId) {
-
-        List<MessageDto.MessageResponseDto> messageResponses = messageService.getArticleSenderMessages(articleId, userId);
-        return ResponseEntity.ok(messageResponses);
-
-    }
+//    /**
+//     * 게시물 작성자가 해당 게시물에 작성한 메시지 조회
+//     */
+//    @GetMapping("/getArticleAuthorMessages")
+//    public ResponseEntity<List<MessageDto.MessageResponseDto>> getArticleAuthorMessages(@RequestParam Long articleId, Long receiverUserId) {
+//
+//        List<MessageDto.MessageResponseDto> messageResponses = messageService.getArticleAuthorMessages(articleId, receiverUserId);
+//        return ResponseEntity.ok(messageResponses);
+//
+//    }
+//
+//    /**
+//     * 사용자가 해당 게시물에 작성한 메시지 조회
+//     */
+//    @GetMapping("/getArticleSenderMessages")
+//    public ResponseEntity<List<MessageDto.MessageResponseDto>> getArticleSenderMessages(@RequestParam Long articleId, Long userId) {
+//
+//        List<MessageDto.MessageResponseDto> messageResponses = messageService.getArticleSenderMessages(articleId, userId);
+//        return ResponseEntity.ok(messageResponses);
+//
+//    }
 
 
 
