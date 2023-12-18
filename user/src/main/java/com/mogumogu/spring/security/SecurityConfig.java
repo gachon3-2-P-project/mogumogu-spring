@@ -50,14 +50,12 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .addFilter(new JwtAuthenticationFilter(authenticationManager))
                 // .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository, adminRepository))
-               // .addFilterBefore(new JwtExceptionHandlerFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
                 //        .requestMatchers(new AntPathRequestMatcher("/**")).hasAnyRole("ADMIN","USER")
                         .anyRequest().permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        //.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                         .addLogoutHandler((request, response, authentication) -> {
                             HttpSession session = request.getSession(false);
                             if (session != null) {
