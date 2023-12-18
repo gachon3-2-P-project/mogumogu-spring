@@ -49,11 +49,11 @@ public class SecurityConfig {
                 )
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .addFilter(new JwtAuthenticationFilter(authenticationManager))
-                // .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository, adminRepository))
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
-                //        .requestMatchers(new AntPathRequestMatcher("/**")).hasAnyRole("ADMIN","USER")
-                        .anyRequest().permitAll())
+//                // .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository, adminRepository))
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
+//                //        .requestMatchers(new AntPathRequestMatcher("/**")).hasAnyRole("ADMIN","USER")
+//                        .anyRequest().permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .addLogoutHandler((request, response, authentication) -> {
