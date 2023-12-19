@@ -262,7 +262,7 @@ public class ArticleService {
         ArticleEntity article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
 
-        article.setTransactionStatus(Transaction.COMPLETED);
+        article.setTransactionStatus(Transaction.APPROVED);
 
         return "관리자가 거래 승인하였습니다.";
     }
