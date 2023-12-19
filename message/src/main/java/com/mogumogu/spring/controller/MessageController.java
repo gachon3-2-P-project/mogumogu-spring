@@ -1,7 +1,12 @@
 package com.mogumogu.spring.controller;
 
+import com.mogumogu.spring.ArticleEntity;
+import com.mogumogu.spring.constant.Transaction;
 import com.mogumogu.spring.dto.ArticleDto;
 import com.mogumogu.spring.dto.MessageDto;
+import com.mogumogu.spring.exception.BusinessLogicException;
+import com.mogumogu.spring.exception.ExceptionCode;
+import com.mogumogu.spring.repository.ArticleRepository;
 import com.mogumogu.spring.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +21,7 @@ import java.util.List;
 public class MessageController {
 
     private final MessageService messageService;
+    private final ArticleRepository articleRepository;
 
     /**
      * 쪽지 등록
@@ -26,17 +32,6 @@ public class MessageController {
         return ResponseEntity.ok().body(responseDto);
     }
 
-
-
-//    /**
-//     * 게시글Id로 작성된 쪽지 조회
-//     */
-//
-//    @GetMapping("/getArticleMessages")
-//    public ResponseEntity<List<MessageDto.MessageResponseDto>> getArticleMessages(@RequestParam Long articleId) {
-//        List<MessageDto.MessageResponseDto> articlesWithMessages = messageService.getArticleMessages(articleId);
-//        return ResponseEntity.ok().body(articlesWithMessages);
-//    }
 
     /**
      * 해당 게시물 쪽지 조회
@@ -85,8 +80,9 @@ public class MessageController {
      */
 
     @GetMapping("/getArticleMessages")
-    public ResponseEntity<List<MessageDto.MessageResponseDto>> getArticleMessages(@RequestParam Long articleId, Long userId) {
-        List<MessageDto.MessageResponseDto> articlesWithMessages = messageService.getArticleMessages(articleId, userId);
+    public ResponseEntity<List<MessageDto.MessageArticleResponseDto>> getArticleMessages(@RequestParam Long articleId, Long userId) {
+        List<MessageDto.MessageArticleResponseDto> articlesWithMessages = messageService.getArticleMessages(articleId, userId);
+
         return ResponseEntity.ok().body(articlesWithMessages);
     }
 

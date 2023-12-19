@@ -28,6 +28,15 @@ public interface MessageMapper {
     @Mapping(source = "article.title", target = "articleTitle")
     MessageDto.MessageResponseDto toResponseDto(MessageEntity messageEntity);
 
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "article.id", target = "articleId")
+    //@Mapping(source = "user.nickName", target = "nickName")
+    @Mapping(target = "receiverId", ignore = true)
+    @Mapping(target = "senderId", ignore = true)
+    @Mapping(source = "article.title", target = "articleTitle")
+    @Mapping(target = "transactionStatus", ignore = true)
+    MessageDto.MessageArticleResponseDto toArticleResponseDto(MessageEntity messageEntity);
+
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", source = "userEntity")
