@@ -223,7 +223,7 @@ public class ArticleService {
 
         log.info("입금 자 count: {}", article.getDepositNumber());
 
-        if (article.getDepositNumber() >= article.getNumberOfPeople()) {
+        if (article.getDepositNumber() >= article.getNumberOfPeople()-1) {
             article.setTransactionStatus(Transaction.RECRUITCLOSED);
             return "모집 마감";
         } else {
@@ -243,7 +243,7 @@ public class ArticleService {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
 
 
-        if (article.getTransactionNumber() >= article.getNumberOfPeople()) {
+        if (article.getTransactionNumber() >= article.getNumberOfPeople() + 1) {
             article.setTransactionStatus(Transaction.COMPLETED);
             return "판매자 / 구매자 거래 완료 ";
         } else {
