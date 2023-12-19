@@ -79,14 +79,19 @@ public class MessageController {
      * 게시물 작성자와 1:1 대화 내용
      */
 
+//    @GetMapping("/getArticleMessages")
+//    public ResponseEntity<List<MessageDto.MessageResponseDto>> getArticleMessages(@RequestParam Long articleId, Long userId) {
+//        List<MessageDto.MessageResponseDto> articlesWithMessages = messageService.getArticleMessages(articleId, userId);
+//
+//        return ResponseEntity.ok().body(articlesWithMessages);
+//    }
+
     @GetMapping("/getArticleMessages")
-    public ResponseEntity<List<MessageDto.MessageResponseDto>> getArticleMessages(@RequestParam Long articleId, Long userId) {
-        List<MessageDto.MessageResponseDto> articlesWithMessages = messageService.getArticleMessages(articleId, userId);
+    public ResponseEntity<List<MessageDto.MessageArticleResponseDto>> getArticleMessages(@RequestParam Long articleId, Long userId) {
+        List<MessageDto.MessageArticleResponseDto> articlesWithMessages = messageService.getArticleMessages(articleId, userId);
 
         return ResponseEntity.ok().body(articlesWithMessages);
     }
-
-
 
 
 
