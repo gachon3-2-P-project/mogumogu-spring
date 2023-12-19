@@ -1,5 +1,6 @@
 package com.mogumogu.spring.service;
 
+import com.mogumogu.spring.constant.Transaction;
 import com.mogumogu.spring.dto.ArticleDto;
 import com.mogumogu.spring.exception.BusinessLogicException;
 import com.mogumogu.spring.exception.ExceptionCode;
@@ -15,6 +16,7 @@ import com.mogumogu.spring.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -147,7 +149,7 @@ public class MessageService {
 
 
 
-    public List<MessageDto.MessageResponseDto> getArticleMessages(Long articleId, Long userId) {
+    public List<MessageDto.MessageArticleResponseDto> getArticleMessages(Long articleId, Long userId) {
         ArticleEntity articleEntity = articleRepository.findById(articleId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
 
@@ -175,9 +177,9 @@ public class MessageService {
         allMessages.addAll(userMessages);
 
 
-        List<MessageDto.MessageResponseDto> messageDtos = allMessages.stream()
+        List<MessageDto.MessageArticleResponseDto> messageDtos = allMessages.stream()
                 .map(messageEntity -> {
-                    MessageDto.MessageResponseDto messageResponseDto = messageMapper.toResponseDto(messageEntity);
+                    MessageDto.MessageArticleResponseDto messageResponseDto = messageMapper.toArticleResponseDto(messageEntity);
 
                     // receiverId와 senderId 설정
                     String receiverNickName = messageEntity.getReceiver();
@@ -188,9 +190,12 @@ public class MessageService {
                     Long senderId = userRepository.findIdByNickName(senderNickName);
                     messageResponseDto.setSenderId(senderId);
 
+                    Transaction transactionStatus = articleEntity.getTransactionStatus();
+                    messageResponseDto.setTransactionStatus(transactionStatus);
+
                     return messageResponseDto;
                 })
-                .sorted(Comparator.comparingLong(MessageDto.MessageResponseDto::getId))
+                .sorted(Comparator.comparingLong(MessageDto.MessageArticleResponseDto::getId))
                 .collect(Collectors.toList());
 
         return messageDtos;
