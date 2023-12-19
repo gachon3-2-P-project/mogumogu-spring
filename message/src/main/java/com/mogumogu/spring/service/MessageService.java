@@ -92,9 +92,8 @@ public class MessageService {
         allMessages.addAll(sentMessages);
         allMessages.addAll(receivedMessages);
 
-        // 확인된 receiver와 sender를 저장하기 위한 Set
-        Set<String> checkedReceivers = new HashSet<>();
-        Set<String> checkedSenders = new HashSet<>();
+        // 중복 제거를 위한 Set
+        Set<String> checkedMessages = new HashSet<>();
 
         return allMessages.stream()
                 .filter(messageEntity -> {
@@ -102,18 +101,10 @@ public class MessageService {
                     String receiver = messageEntity.getReceiver();
                     String sender = messageEntity.getSender();
 
-                    if (receiver != null && !checkedReceivers.contains(receiver)) {
-                        if (receiver.equals(userEntity.getNickName())) {
-                            checkedReceivers.add(receiver);
-                            return true;
-                        }
-                    }
-
-                    //sender
-                    if (sender != null && !checkedSenders.contains(sender)) {
-                        // userId와 senderId가 같은 경우에도 추가
-                        if (sender.equals(userEntity.getNickName())) {
-                            checkedSenders.add(sender);
+                    if (receiver != null && sender != null) {
+                        String messageKey = receiver + sender;
+                        if (!checkedMessages.contains(messageKey)) {
+                            checkedMessages.add(messageKey);
                             return true;
                         }
                     }
