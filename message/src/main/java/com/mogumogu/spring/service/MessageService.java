@@ -109,6 +109,7 @@ public class MessageService {
                         }
                     }
 
+                    //sender
                     if (sender != null && !checkedSenders.contains(sender)) {
                         // userId와 senderId가 같은 경우에도 추가
                         if (sender.equals(userEntity.getNickName())) {
