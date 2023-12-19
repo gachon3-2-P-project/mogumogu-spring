@@ -78,6 +78,64 @@ public class MessageService {
         log.info("삭제된 Message: {}",messageId);
     }
 
+//    public List<MessageDto.MessageResponseDto> getMessageStorage(Long userId) {
+//        UserEntity userEntity = userRepository.findById(userId)
+//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+//
+//        // 해당 사용자가 보낸 메시지 조회
+//        List<MessageEntity> sentMessages = messageRepository.findBySender(userEntity.getNickName());
+//
+//        // 해당 사용자가 받은 메시지 조회
+//        List<MessageEntity> receivedMessages = messageRepository.findByReceiver(userEntity.getNickName());
+//
+//        // 받은 메시지와 보낸 메시지를 합친 후 중복을 제거
+//        List<MessageEntity> allMessages = new ArrayList<>();
+//        allMessages.addAll(sentMessages);
+//        allMessages.addAll(receivedMessages);
+//
+//        // 중복 제거를 위한 Set
+//        Set<String> checkedMessages = new HashSet<>();
+//
+//        return allMessages.stream()
+//                .filter(messageEntity -> {
+//
+//                    String receiver = messageEntity.getReceiver();
+//                    String sender = messageEntity.getSender();
+//
+//                    if (receiver != null && sender != null) {
+//                        String messageKey = receiver + sender;
+//                        if (!checkedMessages.contains(messageKey)) {
+//                            checkedMessages.add(messageKey);
+//                            return true;
+//                        }
+//                    }
+//
+//                    return false;
+//                })
+//                .map(messageEntity -> {
+//                    MessageDto.MessageResponseDto messageResponseDto = messageMapper.toResponseDto(messageEntity);
+//
+//                    // 해당 메시지가 속한 게시물 정보 추가
+//                    ArticleEntity articleEntity = messageEntity.getArticle();
+//                    if (articleEntity != null) {
+//                        messageResponseDto.setArticleId(articleEntity.getId());
+//                        messageResponseDto.setArticleTitle(articleEntity.getTitle());
+//                    }
+//
+//                    // receiverId와 senderId 설정
+//                    String receiverNickName = messageEntity.getReceiver();
+//                    Long receiverId = userRepository.findIdByNickName(receiverNickName);
+//                    messageResponseDto.setReceiverId(receiverId);
+//
+//                    String senderNickName = messageEntity.getSender();
+//                    Long senderId = userRepository.findIdByNickName(senderNickName);
+//                    messageResponseDto.setSenderId(senderId);
+//
+//                    return messageResponseDto;
+//                })
+//                .collect(Collectors.toList());
+//    }
+
     public List<MessageDto.MessageResponseDto> getMessageStorage(Long userId) {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
@@ -88,30 +146,12 @@ public class MessageService {
         // 해당 사용자가 받은 메시지 조회
         List<MessageEntity> receivedMessages = messageRepository.findByReceiver(userEntity.getNickName());
 
-        // 받은 메시지와 보낸 메시지를 합친 후 중복을 제거
+        // 받은 메시지와 보낸 메시지를 합침
         List<MessageEntity> allMessages = new ArrayList<>();
         allMessages.addAll(sentMessages);
         allMessages.addAll(receivedMessages);
 
-        // 중복 제거를 위한 Set
-        Set<String> checkedMessages = new HashSet<>();
-
         return allMessages.stream()
-                .filter(messageEntity -> {
-
-                    String receiver = messageEntity.getReceiver();
-                    String sender = messageEntity.getSender();
-
-                    if (receiver != null && sender != null) {
-                        String messageKey = receiver + sender;
-                        if (!checkedMessages.contains(messageKey)) {
-                            checkedMessages.add(messageKey);
-                            return true;
-                        }
-                    }
-
-                    return false;
-                })
                 .map(messageEntity -> {
                     MessageDto.MessageResponseDto messageResponseDto = messageMapper.toResponseDto(messageEntity);
 
@@ -135,6 +175,8 @@ public class MessageService {
                 })
                 .collect(Collectors.toList());
     }
+
+
 
 
 
