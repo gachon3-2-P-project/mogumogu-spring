@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -138,42 +139,47 @@ public class MessageService {
 
 
 
+    public List<MessageDto.MessageArticleResponseDto> getArticleMessages(
+            @RequestParam(name = "articleId") Long articleId,
+            @RequestParam(name = "userId") Long userId,
+            @RequestParam(name = "senderInputId") Long senderInputId) {
 
-
-
-    public List<MessageDto.MessageArticleResponseDto> getArticleMessages(Long articleId, Long userId) {
         ArticleEntity articleEntity = articleRepository.findById(articleId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
 
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
-        // 게시물 작성자의 닉네임과 사용자 닉네임 가져오기
         String authorNickName = articleEntity.getUser().getNickName();
         String userNickName = userEntity.getNickName();
 
-        // 게시물 작성자가 쪽지 보내는 사용자 메시지 가져오기
         List<MessageEntity> authorMessages = articleEntity.getMessages().stream()
                 .filter(messageEntity ->
                         authorNickName.equals(messageEntity.getSender()) || userNickName.equals(messageEntity.getReceiver()))
                 .collect(Collectors.toList());
 
-        // 사용자가 보낸 메시지 가져오기
         List<MessageEntity> userMessages = articleEntity.getMessages().stream()
                 .filter(messageEntity -> userNickName.equals(messageEntity.getSender()) || userNickName.equals(messageEntity.getReceiver()))
                 .collect(Collectors.toList());
 
-        // 두 리스트 합치기
         Set<MessageEntity> allMessages = new HashSet<>();
         allMessages.addAll(authorMessages);
         allMessages.addAll(userMessages);
 
-
         List<MessageDto.MessageArticleResponseDto> messageDtos = allMessages.stream()
+                .filter(messageEntity -> {
+                    String receiverNickName = messageEntity.getReceiver();
+                    Long receiverId = userRepository.findIdByNickName(receiverNickName);
+
+                    String senderNickName = messageEntity.getSender();
+                    Long senderId = userRepository.findIdByNickName(senderNickName);
+
+                    return (senderInputId.equals(receiverId) || senderInputId.equals(senderId))
+                            && (userNickName.equals(messageEntity.getSender()) || userNickName.equals(messageEntity.getReceiver()));
+                })
                 .map(messageEntity -> {
                     MessageDto.MessageArticleResponseDto messageResponseDto = messageMapper.toArticleResponseDto(messageEntity);
 
-                    // receiverId와 senderId 설정
                     String receiverNickName = messageEntity.getReceiver();
                     Long receiverId = userRepository.findIdByNickName(receiverNickName);
                     messageResponseDto.setReceiverId(receiverId);
