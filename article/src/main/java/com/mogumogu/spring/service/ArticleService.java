@@ -243,7 +243,7 @@ public class ArticleService {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
 
 
-        if (article.getTransactionNumber() >= article.getNumberOfPeople() + 1) {
+        if (article.getTransactionNumber() >= article.getNumberOfPeople()) {
             article.setTransactionStatus(Transaction.COMPLETED);
             return "판매자 / 구매자 거래 완료 ";
         } else {
