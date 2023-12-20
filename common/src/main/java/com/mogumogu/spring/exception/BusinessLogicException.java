@@ -1,16 +1,33 @@
 package com.mogumogu.spring.exception;
 
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 public class BusinessLogicException extends RuntimeException {
 
-    @Getter
-    private ExceptionCode exceptionCode;
+//    @Getter
+//    private ExceptionCode exceptionCode;
+//
+//    public BusinessLogicException(ExceptionCode exceptionCode){
+//        super(exceptionCode.getMessage());
+//        this.exceptionCode = exceptionCode;
+//    }
+//
+//    public ExceptionCode getExceptionCode() { return exceptionCode; }
+//
+//    public HttpStatus getHttpStatus() {
+//        return httpStatus;
+//    }
 
-    public BusinessLogicException(ExceptionCode exceptionCode){
+    private final HttpStatus httpStatus;
+
+    public BusinessLogicException(ExceptionCode exceptionCode) {
         super(exceptionCode.getMessage());
-        this.exceptionCode = exceptionCode;
+        this.httpStatus = exceptionCode.getHttpStatus();
     }
 
-    public ExceptionCode getExceptionCode() { return exceptionCode; }
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
+
 }

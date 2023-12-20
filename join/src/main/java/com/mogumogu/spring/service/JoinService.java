@@ -1,23 +1,25 @@
 package com.mogumogu.spring.service;
 
+import com.mogumogu.spring.EmailAuth;
+import com.mogumogu.spring.UserEntity;
 import com.mogumogu.spring.constant.Role;
 import com.mogumogu.spring.dto.UserDto;
 import com.mogumogu.spring.exception.BusinessLogicException;
 import com.mogumogu.spring.exception.ExceptionCode;
-import com.mogumogu.spring.EmailAuth;
-import com.mogumogu.spring.UserEntity;
 import com.mogumogu.spring.mapper.UserMapper;
 import com.mogumogu.spring.repository.EmailRepository;
 import com.mogumogu.spring.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -35,34 +37,59 @@ public class JoinService {
     @Value("${spring.mail.auth-code-expiration-millis}")
     private long authCodeExpirationMillis;
 
+    /**
+     * 인증 코드 보낸 뒤 10 분마다 해당 데이터 삭제
+     */
+
+    @Scheduled(fixedRate = 600000)  // 10분마다 실행
+    @Transactional
+    public void deleteExpiredAuthCodes() {
+
+        // 현재 시간을 기준으로 10분 이전에 만료된 인증 코드를 조회
+        long currentTimeMinusOneMinute = System.currentTimeMillis() - 600000;
+        log.info(String.valueOf(currentTimeMinusOneMinute));
+
+        // 현재 시간을 기준으로 10분 이전에 만료된 인증 코드를 조회
+        List<EmailAuth> expiredAuthCodes = emailRepository.findByAuthCodeExpirationMillisLessThan(currentTimeMinusOneMinute);
+
+        // 만료된 인증 코드 삭제
+        for (EmailAuth expiredAuthCode : expiredAuthCodes) {
+            emailRepository.delete(expiredAuthCode);
+            log.info("Expired Email : {}", expiredAuthCode.getEmail());
+        }
+
+
+    }
+
 
     @Transactional
     public void sendCodeToEmail(String toEmail) {
-        this.checkDuplicatedEmail(toEmail);
+        //this.checkDuplicatedEmail(toEmail);
         String title = "MoguMogu 이메일 인증 번호";
         String authCode = this.createCode();
         mailService.sendEmail(toEmail, title, authCode);
 
         //이메일 인증번호 보낸 후 DB에 저장
-        EmailAuth emailAuth = EmailAuth.builder()
+        EmailAuth emailAuthEntity = EmailAuth.builder()
                 .email(toEmail)
                 .authCode(authCode)
+                .authCodeExpirationMillis(authCodeExpirationMillis)
                 .build();
-        emailRepository.save(emailAuth);
+        emailRepository.save(emailAuthEntity);
 
 
     }
 
-    /**
-     * 이미 회원가입한 회원인지 확인하는 메서드
-     */
-    private void checkDuplicatedEmail(String username) {
-        Optional<UserEntity> user = Optional.ofNullable(userRepository.findByUsername(username)); //username == email
-        if (user.isPresent()) {
-            log.debug("MemberServiceImpl.checkDuplicatedEmail exception occur email: {}", username);
-            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
-        }
-    }
+//    /**
+//     * 이미 회원가입한 회원인지 확인하는 메서드
+//     */
+//    private void checkDuplicatedEmail(String username) {
+//        Optional<UserEntity> user = Optional.ofNullable(userRepository.findByUsername(username)); //username == email
+//        if (user.isPresent()) {
+//            log.debug("MemberServiceImpl.checkDuplicatedEmail exception occur email: {}", username);
+//            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
+//        }
+//    }
 
     @Transactional
     public String createCode() {
@@ -80,8 +107,9 @@ public class JoinService {
         }
     }
 
+    @Transactional
     public boolean verifiedCode(String email, String authCode) {
-        this.checkDuplicatedEmail(email);
+        //this.checkDuplicatedEmail(email);
 
         // 테이블에서 EmailAuth 조회
         EmailAuth emailAuth = emailRepository.findByEmail(email);

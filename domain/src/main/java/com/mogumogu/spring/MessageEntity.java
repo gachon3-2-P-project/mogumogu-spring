@@ -14,7 +14,7 @@ public class MessageEntity extends TimeStamp {
 
     @Id
     @Column(name = "message_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,4 +30,6 @@ public class MessageEntity extends TimeStamp {
     @Lob
     @Column(columnDefinition = "TEXT")
     private String content; //내용
+
+    private String sender; // 쪽지 발신자 닉네임
 }

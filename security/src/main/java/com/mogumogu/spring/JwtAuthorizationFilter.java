@@ -1,9 +1,8 @@
-package com.mogumogu.spring.jwt;
+package com.mogumogu.spring;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.mogumogu.spring.PersonEntity;
-import com.mogumogu.spring.auth.PrincipalDetails;
 import com.mogumogu.spring.repository.AdminRepository;
 import com.mogumogu.spring.repository.UserRepository;
 import jakarta.servlet.FilterChain;
@@ -52,6 +51,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         if (username != null) {
             PersonEntity person;
+            log.info(username);
             if (username.contains("admin_"))
                 person = adminRepository.findByUsername(username);
             else person = userRepository.findByUsername(username);

@@ -1,5 +1,6 @@
 package com.mogumogu.spring.dto;
 
+import com.mogumogu.spring.constant.Transaction;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -24,6 +25,14 @@ public class ArticleDto {
         private Integer numberOfPeople; //인원 수
 
         private Integer complain; // 게시글 신고 횟수 (최대 5회)
+
+        private String productName; //상품명
+
+        private Integer cost; //금액
+
+        private Integer depositNumber; //입금 수
+
+        private Integer transactionNumber; //거래 완료 수
 
 
     }
@@ -53,6 +62,16 @@ public class ArticleDto {
 
         private LocalTime createdAt;
 
+        private String productName; //상품명
+
+        private Integer cost; //금액
+
+        private Transaction transactionStatus; //거래 상태
+
+        private Integer depositNumber; //입금 수
+
+        private Integer transactionNumber; //거래 완료 수
+
 
 
     }
@@ -72,6 +91,16 @@ public class ArticleDto {
         private Integer numberOfPeople; //인원 수
 
         private Integer complain; // 게시글 신고 횟수 (최대 5회)
+
+        private String productName; //상품명
+
+        private Integer cost; //금액
+
+        private Transaction transactionStatus; //거래 상태
+
+        private Integer depositNumber; //입금 수
+
+        private Integer transactionNumber; //거래 완료 수
 
     }
 

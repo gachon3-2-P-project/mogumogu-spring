@@ -1,4 +1,4 @@
-package com.mogumogu.spring.jwt;
+package com.mogumogu.spring;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

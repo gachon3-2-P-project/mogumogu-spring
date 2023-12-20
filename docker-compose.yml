@@ -28,7 +28,6 @@ services:
     networks:
       - msa-network
     restart: on-failure
-
   messageservice:
     image: joowojr/message-service:latest
     container_name: messageservice
@@ -40,19 +39,6 @@ services:
     networks:
       - msa-network
     restart: on-failure
-
-  transactionservice:
-    image: joowojr/transaction-service:latest
-    container_name: transactionservice
-    ports:
-      - 8083:8080
-    depends_on:
-      - eureka
-      - gateway
-    networks:
-      - msa-network
-    restart: on-failure
-
   userservice:
     image: joowojr/user-service:latest
     container_name: userservice
@@ -75,7 +61,6 @@ services:
     networks:
       - msa-network
     restart: on-failure
-
 networks:
   msa-network:
     external: true

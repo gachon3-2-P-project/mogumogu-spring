@@ -3,8 +3,28 @@ spring:
     web-application-type: reactive
   application:
     name: gateway-service
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: ${aws.db.url}
+#    username: ${aws.db.username}
+#    password: ${aws.db.password}
   cloud:
     gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+      globalcors:
+          cors-configurations:
+            '[/**]':
+              allowedOrigins: ['http://localhost:3000', 'http://dana-seo.shop:3000']
+              allow-credentials: true # JWT 나 쿠키를 사용해 메시지를 보내야 할 경우 true
+              allowedHeaders: '*'
+              allowedMethods: # 메서드를 명시하지 않으면 안되는 경우도 있기 때문에 메서드는 명시해주는 편이 좋다고 한다.
+                - PUT
+                - GET
+                - POST
+                - DELETE
+                - OPTIONS
+                - PATCH
       routes:
         - id: article-service # article-service/로 요청이 들어오면
           uri: lb://ARTICLE-SERVICE # 유레카 서버에서 article-service를 찾아서 그 곳으로 요청을 보낸다.
@@ -21,13 +41,7 @@ spring:
           predicates:
             - Path=/api/join/**
           filters:
-            - RewritePath=/api/article/(?<segment>.*), /$\{segment}
-        - id: transaction-service
-          uri: lb://TRANSACTION-SERVICE
-          predicates:
-            - Path=/api/transaction/**
-          filters:
-            - RewritePath=/api/transaction/(?<segment>.*), /$\{segment}
+            - RewritePath=/api/join/(?<segment>.*), /$\{segment}
         - id: message-service
           uri: lb://MESSAGE-SERVICE
           predicates:
@@ -40,6 +54,11 @@ spring:
             - Path=/api/user/**
           filters:
             - RewritePath=/api/user/(?<segment>.*), /$\{segment}
+#jwt:
+#  secret: 가천모구모구
+#  expiration-time: 864000000 # 10 days
+#  token-prefix: Bearer
+#  header-string: joinorization
 eureka:
   client:
     register-with-eureka: true

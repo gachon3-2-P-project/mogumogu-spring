@@ -1,5 +1,6 @@
 package com.mogumogu.spring.service;
 
+import com.mogumogu.spring.constant.Transaction;
 import com.mogumogu.spring.repository.ArticleRepository;
 import com.mogumogu.spring.exception.BusinessLogicException;
 import com.mogumogu.spring.exception.ExceptionCode;
@@ -41,6 +42,10 @@ public class ArticleService {
 
 
         ArticleEntity savedArticle = articleRepository.save(articleMapper.toReqeustEntity(articleRequestDto, userEntity));
+        savedArticle.setTransactionStatus(Transaction.RECRUITOPEN);
+        savedArticle.setDepositNumber(0);
+        savedArticle.setTransactionNumber(0);
+
 
         ArticleDto.ArticleResponseDto responseDto = articleMapper.toResponseDto(savedArticle);
         responseDto.setUserId(userId);
@@ -81,7 +86,7 @@ public class ArticleService {
             MessageDto.MessageResponseDto messageResponseDto = messageMapper.toResponseDto(messageEntity);
 
             messageResponseDto.setUserId(messageEntity.getUser().getId());
-            messageResponseDto.setNickName(messageEntity.getUser().getNickName());
+            //messageResponseDto.setNickName(messageEntity.getUser().getNickName());
 
             messageDtos.add(messageResponseDto);
         }
@@ -119,7 +124,7 @@ public class ArticleService {
                 MessageDto.MessageResponseDto messageResponseDto = messageMapper.toResponseDto(MessageEntity);
 
                 messageResponseDto.setUserId(MessageEntity.getUser().getId());
-                messageResponseDto.setNickName(MessageEntity.getUser().getNickName());
+                //messageResponseDto.setNickName(MessageEntity.getUser().getNickName());
 
                 MessageDtos.add(messageResponseDto);
             }
@@ -208,9 +213,71 @@ public class ArticleService {
         }
     }
 
+    /**
+     * 사용자 입금 신청 버튼
+     */
+    @Transactional
+    public String depositButton(Long articleId) {
+        ArticleEntity article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
+
+        log.info("입금 자 count: {}", article.getDepositNumber());
+
+        if (article.getDepositNumber() >= article.getNumberOfPeople()-1) {
+            article.setTransactionStatus(Transaction.RECRUITCLOSED);
+            return "모집 마감";
+        } else {
+            int depositNumber = article.getDepositNumber();
+            depositNumber++;
+            article.setDepositNumber(depositNumber);
+            return "입금 신청 완료";
+        }
+    }
+
+    /**
+     * 사용자 거래완료 버튼
+     */
+    @Transactional
+    public String completeButton(Long articleId) {
+        ArticleEntity article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
 
 
+        if (article.getTransactionNumber() >= article.getNumberOfPeople()) {
+            article.setTransactionStatus(Transaction.COMPLETED);
+            return "판매자 / 구매자 거래 완료 ";
+        } else {
+            int transactionNumber = article.getTransactionNumber();
+            transactionNumber++;
+            article.setTransactionNumber(transactionNumber);
+            return "거래 완료 접수";
+        }
+    }
+
+    /**
+     * 관리자 거래 승인 버튼
+     */
+    @Transactional
+    public String adminApprove(Long articleId) {
+        ArticleEntity article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
+
+        article.setTransactionStatus(Transaction.APPROVED);
+
+        return "관리자가 거래 승인하였습니다.";
+    }
 
 
+    /**
+     * 관리자 최종 완료 버튼
+     */
+    @Transactional
+    public String adminFinal(Long articleId) {
+        ArticleEntity article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
 
+        article.setTransactionStatus(Transaction.FINAL); //TODO: 에러 나는지 확인
+
+        return "관리자가 최종 거래 완료";
+    }
 }

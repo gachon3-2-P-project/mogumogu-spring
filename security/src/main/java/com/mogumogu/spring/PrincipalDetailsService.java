@@ -1,15 +1,18 @@
-package com.mogumogu.spring.auth;
+package com.mogumogu.spring;
 
 import com.mogumogu.spring.AdminEntity;
 import com.mogumogu.spring.UserEntity;
+import com.mogumogu.spring.constant.Role;
 import com.mogumogu.spring.repository.AdminRepository;
 import com.mogumogu.spring.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PrincipalDetailsService implements UserDetailsService {
@@ -26,11 +29,13 @@ public class PrincipalDetailsService implements UserDetailsService {
 
         if (username.contains("admin_")) {
             AdminEntity adminEntity = adminRepository.findByUsername(username);
+            adminEntity.setRole(Role.ADMIN);
 
             return new PrincipalDetails(adminEntity);
         } else {
             UserEntity userEntity = userRepository.findByUsername(username);
-
+            userEntity.setRole(Role.USER);
+            System.out.println(userEntity.getUsername());
 
 
             return new PrincipalDetails(userEntity);

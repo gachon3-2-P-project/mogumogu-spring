@@ -1,4 +1,4 @@
-package com.mogumogu.spring.auth;
+package com.mogumogu.spring;
 
 import com.mogumogu.spring.PersonEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +14,11 @@ public class PrincipalDetails implements UserDetails {
 
     private PersonEntity person;
 
+
     public PrincipalDetails(PersonEntity person) {
         this.person = person;
+        System.out.println("=====" + person.getUsername());
+        System.out.println("====" + person.getRole());
     }
 
     public PersonEntity getPerson() {
@@ -31,6 +34,8 @@ public class PrincipalDetails implements UserDetails {
     public String getUsername() {
         return person.getUsername();
     }
+
+
 
     @Override
     public boolean isAccountNonExpired() {
@@ -52,10 +57,18 @@ public class PrincipalDetails implements UserDetails {
         return true;
     }
 
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        log.info( " -----");
+//        Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+//        log.info(person.getRole() + " -----");
+//        authorities.add(new SimpleGrantedAuthority("ROLE_" + person.getRole().toString()));
+//        return authorities;
+//    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        log.info(person.getRole() + " -----");
         authorities.add(new SimpleGrantedAuthority("ROLE_" + person.getRole().toString()));
         return authorities;
     }

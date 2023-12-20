@@ -254,6 +254,6 @@ jobs:
           script: |
             cd ~/mogumogu-spring
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker-compose up -d
+            docker-compose up 
             docker image prune -af
 

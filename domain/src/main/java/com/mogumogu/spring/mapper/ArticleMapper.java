@@ -25,8 +25,11 @@ public interface ArticleMapper {
     ArticleDto.ArticleResponseDto toResponseDto(ArticleEntity articleEntity);
 
     @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "user.nickName", target = "nickName")
+    //@Mapping(source = "user.nickName", target = "nickName")
     @Mapping(source = "article.id", target = "articleId")
+    @Mapping(target = "receiverId", ignore = true)
+    @Mapping(target = "senderId", ignore = true)
+    @Mapping(source = "article.title", target = "articleTitle")
     MessageDto.MessageResponseDto toMessageResponseDto(MessageEntity messageEntity);
 
 
@@ -46,6 +49,7 @@ public interface ArticleMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", source = "userEntity")
     @Mapping(target = "messages", ignore = true)
+    @Mapping(target="transactionStatus", ignore = true)
     ArticleEntity toReqeustEntity(ArticleDto.ArticleRequestDto articleRequestDto, UserEntity userEntity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

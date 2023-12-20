@@ -1,9 +1,10 @@
-package com.mogumogu.spring;
+package com.mogumogu.spring.security;
 
-import com.mogumogu.spring.jwt.JwtAuthenticationFilter;
-import com.mogumogu.spring.jwt.JwtAuthorizationFilter;
+import com.mogumogu.spring.JwtAuthenticationFilter;
+import com.mogumogu.spring.JwtAuthorizationFilter;
 import com.mogumogu.spring.repository.AdminRepository;
 import com.mogumogu.spring.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +24,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 @Slf4j
 public class SecurityConfig {
-
-    @Autowired
-    private CorsConfig corsConfig;
-
-    @Autowired
-    private AuthenticationConfiguration authenticationConfiguration;
 
     @Autowired
     private UserRepository userRepository;
@@ -53,16 +48,25 @@ public class SecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .addFilter(corsConfig.corsFilter())
                 .addFilter(new JwtAuthenticationFilter(authenticationManager))
-                .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository, adminRepository))
-               // .addFilterBefore(new JwtExceptionHandlerFilter(), UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(new AntPathRequestMatcher("/api/admin/**")).hasRole("ADMIN")
-                        .requestMatchers(new AntPathRequestMatcher("/api/user/**")).hasAnyRole("ADMIN", "USER")  //ROLE_ 자동으로 붙여짐
-         //               .requestMatchers(new AntPathRequestMatcher("/user/join")).permitAll() //회원가입 접근 가능하게
-                        .anyRequest().permitAll())
+//                // .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository, adminRepository))
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
+//                //        .requestMatchers(new AntPathRequestMatcher("/**")).hasAnyRole("ADMIN","USER")
+//                        .anyRequest().permitAll())
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .addLogoutHandler((request, response, authentication) -> {
+                            HttpSession session = request.getSession(false);
+                            if (session != null) {
+                                session.invalidate();
+                            }
+                        })
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            response.sendRedirect("/");
+                        })
+                        .deleteCookies("remember-me")
+                )
                 .build();
-
     }
 }

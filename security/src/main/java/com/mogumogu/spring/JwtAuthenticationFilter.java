@@ -1,9 +1,8 @@
-package com.mogumogu.spring.jwt;
+package com.mogumogu.spring;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mogumogu.spring.auth.PrincipalDetails;
 import com.mogumogu.spring.dto.LoginRequestDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,6 +18,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -77,6 +78,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withClaim("username", principalDetailis.getPerson().getUsername())
                 .sign(Algorithm.HMAC512(JwtProperties.secret));
 
-        response.addHeader(JwtProperties.headerString, jwtToken);
+        //response.addHeader(JwtProperties.headerString, jwtToken);
+
+        // 바디에도 토큰 정보 추가
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("token" , jwtToken);
+        responseBody.put("username", principalDetailis.getPerson().getUsername());
+        responseBody.put("userId", principalDetailis.getPerson().getId());
+
+        response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
+        response.getWriter().flush();
     }
 }
