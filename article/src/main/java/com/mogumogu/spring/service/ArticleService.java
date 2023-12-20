@@ -86,7 +86,7 @@ public class ArticleService {
             MessageDto.MessageResponseDto messageResponseDto = messageMapper.toResponseDto(messageEntity);
 
             messageResponseDto.setUserId(messageEntity.getUser().getId());
-            //messageResponseDto.setNickName(messageEntity.getUser().getNickName());
+
 
             messageDtos.add(messageResponseDto);
         }
@@ -199,9 +199,7 @@ public class ArticleService {
 
         //5회 이상일 경우 게시글 삭제
         if(complain >= 5){
-            //쪽지도 삭제할건지?
-            //messageRepository.deleteByMessage(messageEntity); //TODO : 게시물 삭제될 경우 쪽지도 동시 삭제 될건지?
-            //게시글 삭제
+
             deleteArticle(articleId);
             return null;
         }
@@ -276,7 +274,7 @@ public class ArticleService {
         ArticleEntity article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_EXIST));
 
-        article.setTransactionStatus(Transaction.FINAL); //TODO: 에러 나는지 확인
+        article.setTransactionStatus(Transaction.FINAL);
 
         return "관리자가 최종 거래 완료";
     }
