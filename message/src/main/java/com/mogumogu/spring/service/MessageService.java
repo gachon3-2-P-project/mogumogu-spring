@@ -59,15 +59,7 @@ public class MessageService {
         return responseDto;
     }
 
-    /**
-     * 쪽지 고유 아이디로 쪽지 조회
-     */
-    public MessageDto.MessageResponseDto getMessage(Long messageId) {
 
-        return messageMapper.toResponseDto(messageRepository.findById(messageId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.Message_IS_NOT_EXIST)));
-
-    }
 
     @Transactional
     public void deleteMessage(Long messageId) {
