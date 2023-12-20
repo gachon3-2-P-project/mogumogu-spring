@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 @Slf4j
@@ -64,7 +63,6 @@ public class JoinService {
 
     @Transactional
     public void sendCodeToEmail(String toEmail) {
-        //this.checkDuplicatedEmail(toEmail);
         String title = "MoguMogu 이메일 인증 번호";
         String authCode = this.createCode();
         mailService.sendEmail(toEmail, title, authCode);
@@ -80,16 +78,7 @@ public class JoinService {
 
     }
 
-//    /**
-//     * 이미 회원가입한 회원인지 확인하는 메서드
-//     */
-//    private void checkDuplicatedEmail(String username) {
-//        Optional<UserEntity> user = Optional.ofNullable(userRepository.findByUsername(username)); //username == email
-//        if (user.isPresent()) {
-//            log.debug("MemberServiceImpl.checkDuplicatedEmail exception occur email: {}", username);
-//            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
-//        }
-//    }
+
 
     @Transactional
     public String createCode() {
