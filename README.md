@@ -17,13 +17,25 @@
 이메일 인증을 통한 가천대학교 학생 인증을 통해 보다 안전하게 거래가 진행될 수 있도록 기획하였습니다.
 
 <br></br>
-#  2️⃣ 서비스 차별화 전략
+#  2️⃣ 프로젝트 사용 기술
+- Spring Boot
+- Java 17
+- MySQL
+- SMTP
+- Spring Security
+- AWS EC2, RDS
+- Docker
+- Gradle
+  
+
+<br></br>
+#  3️⃣ 서비스 차별화 전략
 ✅ 이메일 인증(Google SMTP)을 통한 가천대 학생간의 안전한 거래 및 소통  
 ✅ 공동구매 ‘매칭' 및 관리자가 아닌 사용자의 물품 등록  
 ✅ 1인 가구 및 기숙사생 주 타겟 대상
 
 <br></br>
-#  3️⃣ 인프라 스트럭처 설계
+#  4️⃣ 인프라 스트럭처 설계
 
 <br></br>
 마이크로서비스 아키텍처 설계  
@@ -57,7 +69,7 @@
 
 
 <br></br>
-#  4️⃣ 데이터베이스 설계
+#  5️⃣ 데이터베이스 설계
 
 DB : mogumoguDB
 Table : UserEntity, ArticleEntity, MessageEntity, AdminEntity
@@ -66,7 +78,7 @@ Table : UserEntity, ArticleEntity, MessageEntity, AdminEntity
 
 
 <br></br>
-#  5️⃣ 프로젝트 issue
+#  6️⃣ 프로젝트 issue
 - Security 적용 및 토큰 발급 과정 문서화</br>
 https://github.com/gachon3-2-P-project/mogumogu-web/issues/10
 
